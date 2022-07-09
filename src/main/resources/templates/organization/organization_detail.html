@@ -9,16 +9,6 @@
 <body>
 
 <h1 th:text="${organization.name}">Organization Name</h1>
-<ul>
-    <li sec:authorize-acl="${organization} :: 'WRITE'">
-        You have <strong>WRITE</strong> permissions on this object.
-    </li>
-    <li sec:authorize-acl="${organization} :: 'ADMINISTRATION'">
-        You have <strong>ADMINISTRATION</strong> permissions on this object.
-    </li>
-    <li sec:authorize="hasRole('ADMIN')">
-        <strong>You are a global administrator and have full privileges on this object.</strong>
-    </li>
-</ul>
+
 </body>
 </html>
