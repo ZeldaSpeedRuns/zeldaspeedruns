@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+    <title>ZeldaSpeedRuns</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@400;600;700&family=Poppins:wght@300;400;600;700&display=swap"
+          rel="stylesheet">
+
+    <link th:href="@{/index.css}" rel="stylesheet">
+</head>
+<body>
+<header class="header">
+    <nav role="navigation" class="navigation-menu">
+        <div class="navigation-menu__item">
+            <a th:href="@{/}">
+                <img th:src="@{/logo.svg}" alt="ZSR" class="zsr-logo" />
+            </a>
+        </div>
+    </nav>
+
+    <div class="spacer"></div>
+
+    <div class="authentication-status" sec:authorize="isAuthenticated()">
+        <span class="authentication-status__message">
+            Hi there, <span sec:authentication="name">user</span>!
+        </span>
+        <a th:href="@{/user/logout}">
+            <div class="button button--primary">Sign out</div>
+        </a>
+    </div>
+    <div class="authentication-status" sec:authorize="!isAuthenticated()">
+            <span class="authentication-status__message">
+                You are not signed in.
+            </span>
+        <a th:href="@{/user/login}">
+            <div class="button button--primary">Sign in</div>
+        </a>
+    </div>
+</header>
+
+<main layout:fragment="content"></main>
+
+<footer class="footer">
+    <div class="footer__copyright">
+        &copy; <span th:text="${#dates.year(#dates.createNow())}">2022</span>
+        ZeldaSpeedRuns, All Rights Reserved
+    </div>
+</footer>
+</body>
+</html>

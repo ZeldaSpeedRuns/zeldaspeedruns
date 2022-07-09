@@ -1,0 +1,16 @@
+@import "../abstracts";
+
+.input {
+  background-color: $background-color-dark;
+  border: 1px solid $border-color;
+  font-size: 1rem;
+  color: $text-color;
+  border-radius: 3px;
+  padding: 10px 15px;
+
+  &__label {
+    font-weight: 500;
+    margin-bottom: 5px;
+    font-size: 0.8em;
+  }
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>ZeldaSpeedRuns</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="dialog-wrapper">
+        <form method="post" th:action="@{/user/register}" th:object="${form}"
+              class="vertical-form">
+            <img src="../../static/logo.svg" th:src="@{/logo.svg}" alt="ZSR Logo"
+                 class="vertical-form__header-image" width="100" height="100"/>
+
+            <h1 class="vertical-form__header">Register with ZSR</h1>
+
+            <div class="form-field">
+                <label for="username" class="input__label">Username</label>
+                <input type="text" id="username" class="input" th:field="*{username}"
+                       required autofocus/>
+
+                <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}">
+                    Username validation error
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="email-address" class="input__label">Email address</label>
+                <input type="email" id="email-address" class="input" required
+                       th:field="*{emailAddress}"/>
+
+                <div th:if="${#fields.hasErrors('emailAddress')}" th:errors="*{emailAddress}">
+                    Email address validation error
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="email-address-confirmation" class="input__label">Confirm email address</label>
+                <input type="email" id="email-address-confirmation" class="input" required
+                       th:field="*{emailAddressConfirmation}"/>
+
+                <div th:if="${#fields.hasErrors('emailAddressConfirmation')}"
+                     th:errors="*{emailAddressConfirmation}">
+                    Email address confirmation validation error
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="password" class="input__label">Password</label>
+                <input type="password" id="password" class="input" required
+                       th:field="*{password}"/>
+
+                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
+                    Password validation error
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="password-confirmation" class="input__label">Confirm password</label>
+                <input type="password" id="password-confirmation" class="input" required
+                       th:field="*{passwordConfirmation}"/>
+
+                <div th:if="${#fields.hasErrors('passwordConfirmation')}"
+                     th:errors="*{passwordConfirmation}">
+                    Password confirmation validation error
+                </div>
+            </div>
+
+            <div class="form-button-group">
+                <input type="submit" class="button button--max"
+                       value="Register"/>
+            </div>
+
+            <div class="horizontal-line">
+                <span class="horizontal-line__label">Or sign up with</span>
+            </div>
+
+            <div class="provider-list">
+                <div class="provider-icon provider-icon--discord">
+                    <img th:src="@{/images/providers/provider-discord.svg}" alt="Discord"
+                         class="provider-icon__image"/>
+                </div>
+                <div class="provider-icon provider-icon--twitch">
+                    <img th:src="@{/images/providers/provider-twitch.svg}" alt="Twitch"
+                         class="provider-icon__image"/>
+                </div>
+            </div>
+
+            <ul class="link-list">
+                <li class="link-list__item">Already have an account?
+                    <a th:href="@{/user/login}">Sign in.</a></li>
+            </ul>
+        </form>
+    </div>
+</main>
+</body>
+</html>

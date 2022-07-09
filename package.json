@@ -1,0 +1,13 @@
+{
+  "name": "zeldaspeedruns",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "sass --load-path=node_modules src/main/scss/index.scss target/classes/static/index.css",
+    "watch": "sass --watch --load-path=node_modules src/main/scss/index.scss target/classes/static/index.css"
+  },
+  "dependencies": {
+    "sass": "^1.53.0",
+    "normalize.css": "^8.0.1"
+  }
+}

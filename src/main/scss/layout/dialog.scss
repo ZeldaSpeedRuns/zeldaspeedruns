@@ -1,0 +1,10 @@
+.dialog-wrapper {
+  margin: 100px auto 0;
+  width: 400px;
+  max-width: 400px;
+
+  &--wide {
+    width: 800px;
+    max-width: 800px;
+  }
+}

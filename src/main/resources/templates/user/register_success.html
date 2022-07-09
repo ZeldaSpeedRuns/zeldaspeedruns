@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Thank you for registering!</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="dialog-wrapper dialog-wrapper--wide v-flex v-flex--center">
+        <img src="../../static/logo.svg" th:src="@{/logo.svg}" alt="ZSR Logo"
+             width="100" height="100"/>
+
+        <h1>You are breathtaking!</h1>
+
+        <p>Thank you for registering with ZeldaSpeedRuns! Before you can log in with your account, you must confirm your
+            email address. We have sent a message to your email address containing a confirmation link that you can use
+            to activate your account. If you do not see this email then make sure to check your spam folder.</p>
+
+        <p>If you are running into any issues with activating your account then reach out to us on the ZeldaSpeedRuns
+            Discord server, we will do our best to help!</p>
+    </div>
+</main>
+</body>
+</html>

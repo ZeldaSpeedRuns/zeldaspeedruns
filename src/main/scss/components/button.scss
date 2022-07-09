@@ -1,0 +1,18 @@
+@import "../abstracts";
+
+.button {
+  border: none;
+  border-radius: 3px;
+  padding: 10px 20px;
+
+  font-family: $font-stack;
+  font-size: 1.1em;
+  font-weight: 800;
+  color: $background-color;
+  background-color: $accent-color;
+
+  &--max {
+    width: 100%;
+  }
+}
+

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title>Sign out</title>
+</head>
+<body>
+<main layout:fragment="content">
+  <div class="dialog-wrapper">
+    <form method="post" th:action="@{/user/logout}" class="vertical-form">
+      <img src="../../static/logo.svg" th:src="@{/logo.svg}" alt="ZSR Logo"
+           class="vertical-form__header-image" width="100" height="100"/>
+
+      <h1 class="vertical-form__header">Are you sure?</h1>
+
+      <p class="vertical-form__message">See you next time!</p>
+
+      <div class="form-button-group">
+        <input type="submit" class="button button--max" value="Sign out"/>
+      </div>
+    </form>
+  </div>
+</main>
+</body>
+</html>

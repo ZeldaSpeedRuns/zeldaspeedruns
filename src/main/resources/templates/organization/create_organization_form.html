@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>ZeldaSpeedruns - Create Organization</title>
+</head>
+<body>
+<form method="post"
+      th:action="${#mvc.url('OC#createOrganization').build()}"
+      th:object="${form}">
+    <div style="display: flex; flex-direction: column; align-items: start">
+        <label for="name">Organization name</label>
+        <input type="text" id="name" th:field="*{name}" />
+    </div>
+
+    <div style="display: flex; flex-direction: column; align-items: start">
+        <label for="slug">Organization slug</label>
+        <input type="text" id="slug" th:field="*{slug}" />
+    </div>
+
+    <div>
+        <input type="submit" value="Create organization" />
+    </div>
+</form>
+</body>
+</html>

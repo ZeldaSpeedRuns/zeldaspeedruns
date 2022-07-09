@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Sign in with ZSR</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="dialog-wrapper">
+        <form method="post" th:action="@{/user/login}" class="vertical-form">
+            <img src="../../static/logo.svg" th:src="@{/logo.svg}" alt="ZSR Logo"
+                 class="vertical-form__header-image" width="100" height="100"/>
+
+            <h1 class="vertical-form__header">Sign in with ZSR</h1>
+
+            <div class="form-field">
+                <label for="username" class="input__label">Username</label>
+                <input type="text" id="username" name="username" class="input"
+                       required autofocus/>
+            </div>
+
+            <div class="form-field">
+                <label for="password" class="input__label">Password</label>
+                <input type="password" id="password" name="password" class="input"
+                       required/>
+            </div>
+
+            <div class="form-button-group">
+                <input type="submit" class="button button--max"
+                       value="Sign in"/>
+            </div>
+
+            <div class="horizontal-line">
+                <span class="horizontal-line__label">Or sign in with</span>
+            </div>
+
+            <div class="provider-list">
+                <div class="provider-icon provider-icon--discord">
+                    <img th:src="@{/images/providers/provider-discord.svg}" alt="Discord"
+                         class="provider-icon__image"/>
+                </div>
+                <div class="provider-icon provider-icon--twitch">
+                    <img th:src="@{/images/providers/provider-twitch.svg}" alt="Twitch"
+                         class="provider-icon__image"/>
+                </div>
+            </div>
+
+            <ul class="link-list">
+                <li class="link-list__item">Don&apos;t have an account?
+                    <a th:href="@{/user/register}">Register now.</a></li>
+                <li class="link-list__item">Forgot your credentials?
+                    <a th:href="@{/user/recover-account}">Recover your account.</a></li>
+            </ul>
+        </form>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Recover your ZSR account</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="dialog-wrapper v-flex v-flex--center">
+        <img src="../../static/logo.svg" th:src="@{/logo.svg}" alt="ZSR Logo"
+             width="100" height="100"/>
+
+        <h1>You've got mail!</h1>
+        <p>We have sent an email with instructions on how to recover your account.</p>
+    </div>
+</main>
+</body>
+</html>

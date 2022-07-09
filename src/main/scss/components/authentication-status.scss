@@ -1,0 +1,11 @@
+.authentication-status {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 15px;
+
+  &__message {
+    margin: 0 1em;
+  }
+}
+
