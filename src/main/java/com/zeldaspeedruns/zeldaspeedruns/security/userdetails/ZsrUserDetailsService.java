@@ -1,7 +1,6 @@
 package com.zeldaspeedruns.zeldaspeedruns.security.userdetails;
 
 import com.zeldaspeedruns.zeldaspeedruns.security.user.ZsrUserService;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,6 @@ public class ZsrUserDetailsService implements UserDetailsService {
 
     @Override
     public ZsrUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var user = userService.loadUserByUsername(username);
-        return new ZsrUserDetails(user);
+        return new ZsrUserDetails(userService.loadByUsername(username));
     }
 }

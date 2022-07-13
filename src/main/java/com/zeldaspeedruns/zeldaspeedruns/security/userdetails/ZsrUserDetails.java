@@ -5,10 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class ZsrUserDetails implements UserDetails {
     private final ZsrUser user;
@@ -17,16 +14,12 @@ public class ZsrUserDetails implements UserDetails {
         this.user = Objects.requireNonNull(user, "user must not be null");
     }
 
-    public ZsrUser getUser() {
-        return user;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        Set<GrantedAuthority> authorities = new HashSet<>();
 
-        if (user.isAdministrator()) {
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        if (user.isSuperuser()) {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
 
@@ -61,5 +54,9 @@ public class ZsrUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return user.isEnabled();
+    }
+
+    public ZsrUser getUser() {
+        return user;
     }
 }

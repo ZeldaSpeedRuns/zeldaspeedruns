@@ -1,10 +1,12 @@
 package com.zeldaspeedruns.zeldaspeedruns.security.user;
 
+import com.zeldaspeedruns.zeldaspeedruns.security.SecureTokenUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -13,175 +15,197 @@ import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.AdditionalAnswers.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest(classes = ZsrUserServiceImpl.class)
-public class ZsrUserServiceImplTests {
-    @MockBean
-    private ZsrUserRepository repository;
+@ExtendWith(MockitoExtension.class)
+class ZsrUserServiceImplTests {
+    @Mock
+    private ZsrUserRepository userRepository;
 
-    @MockBean
-    private RecoveryTokenRepository tokenRepository;
+    @Mock
+    private UserActionTokenRepository tokenRepository;
 
-    @MockBean
+    @Mock
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private ZsrUserServiceImpl service;
+    @Mock
+    private UserMailService mailService;
+
+    @InjectMocks
+    private ZsrUserServiceImpl userService;
+
+    private final String username = "spell";
+    private final String emailAddress = "spell@example.com";
+    private final String password = "password";
+    private final String encodedPassword = "encoded";
 
     private ZsrUser user;
 
+    private UserActionToken createToken(ActionType actionType) {
+        String tokenValue = SecureTokenUtils.generateAlphanumericToken(40);
+        return new UserActionToken(user, actionType, tokenValue);
+    }
+
     @BeforeEach
     void beforeEach() {
-        this.user = new ZsrUser("tester", "test@example.com", "password");
+        user = new ZsrUser(username, emailAddress, password);
     }
 
     @Test
-    void createUser_userIsSaved() throws Exception {
-        when(repository.save(any(ZsrUser.class))).then(returnsFirstArg());
-        when(passwordEncoder.encode(anyString())).then(returnsFirstArg());
-        var createdUser = service.createUser("tester", "test@example.com", "password");
+    void loadByUsername() {
+        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 
-        verify(repository, times(1)).save(createdUser);
+        var returned = assertDoesNotThrow(() -> userService.loadByUsername(username));
+        assertEquals(returned, user);
     }
 
     @Test
-    void createUser_whenUsernameInUse_throwsException() {
-        when(repository.existsByUsername(anyString())).thenReturn(true);
+    void loadByUsername_whenNotFound_throwsUsernameNotFoundException() {
+        when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
+        assertThrows(UsernameNotFoundException.class, () -> userService.loadByUsername(username));
+    }
 
+    @Test
+    void createUser() {
+        when(userRepository.existsByUsername(username)).thenReturn(false);
+        when(userRepository.existsByEmailAddress(emailAddress)).thenReturn(false);
+        when(userRepository.save(any(ZsrUser.class))).then(returnsFirstArg());
+        when(passwordEncoder.encode(password)).thenReturn(encodedPassword);
+
+        ZsrUser u = assertDoesNotThrow(() -> userService.createUser(username, emailAddress, password));
+
+        assertNotNull(u);
+        assertEquals(username, u.getUsername());
+        assertEquals(emailAddress, u.getEmailAddress());
+        assertEquals(encodedPassword, u.getPassword());
+
+        verify(userRepository, times(1)).save(any(ZsrUser.class));
+        verify(passwordEncoder, times(1)).encode(password);
+    }
+
+    @Test
+    void createRegistrationToken() {
+        when(tokenRepository.save(any(UserActionToken.class))).then(returnsFirstArg());
+
+        var token = userService.createRegistrationToken(user);
+
+        assertNotNull(token);
+        assertEquals(user, token.getUser());
+        assertEquals(ActionType.CONFIRM_EMAIL, token.getActionType());
+        verify(tokenRepository, times(1)).save(token);
+    }
+
+    @Test
+    void createUser_whenUsernameTaken_throwsUsernameInUseException() {
+        when(userRepository.existsByUsername(username)).thenReturn(true);
         assertThrows(UsernameInUseException.class, () -> {
-            service.createUser("tester", "test@example.com", "password");
+            userService.createUser(username, emailAddress, password);
         });
+
+        verify(userRepository, never()).save(any(ZsrUser.class));
+        verifyNoInteractions(mailService);
     }
 
     @Test
-    void createUser_whenEmailAddressInUse_throwsException() {
-        when(repository.existsByEmailAddress(anyString())).thenReturn(true);
-
+    void createUser_whenEmailTaken_throwsEmailInUseException() {
+        when(userRepository.existsByEmailAddress(emailAddress)).thenReturn(true);
         assertThrows(EmailInUseException.class, () -> {
-            service.createUser("tester", "test@example.com", "password");
-        });
-    }
-
-    @Test
-    void loadUserByUsername_whenFound_returnsUser() {
-        when(repository.findByUsername(anyString())).thenAnswer(invocation -> {
-            String username = invocation.getArgument(0);
-            return Optional.of(ZsrUserTestUtils.zsrUser(username));
+            userService.createUser(username, emailAddress, password);
         });
 
-        var user = assertDoesNotThrow(() -> service.loadUserByUsername("tester"));
-        assertEquals("tester", user.getUsername());
+        verify(userRepository, never()).save(any(ZsrUser.class));
+        verifyNoInteractions(mailService);
     }
 
     @Test
-    void loadUserByUsername_whenNotFound_throwsUsernameNotFoundException() {
-        when(repository.findByUsername(anyString())).thenThrow(new UsernameNotFoundException("username"));
-        assertThrows(UsernameNotFoundException.class, () -> service.loadUserByUsername("username"));
+    void registerUser() throws Exception {
+        when(userRepository.save(any(ZsrUser.class))).then(returnsFirstArg());
+        when(passwordEncoder.encode(password)).thenReturn(encodedPassword);
+        when(tokenRepository.save(any(UserActionToken.class))).then(returnsFirstArg());
+
+        var user = assertDoesNotThrow(() -> userService.registerUser(username, emailAddress, password));
+
+        assertNotNull(user);
+        assertFalse(user.isEnabled());
+        verify(mailService, times(1)).sendRegistrationConfirmationMail(any(), any());
     }
 
     @Test
-    void changePassword_passwordIsEncoded() {
-        when(repository.save(any(ZsrUser.class))).then(returnsFirstArg());
-        when(passwordEncoder.encode(anyString())).thenReturn("encoded_password");
-        service.changePassword(user, "new_password");
+    void confirmRegistration() {
+        var token = createToken(ActionType.CONFIRM_EMAIL);
+        var tokenValue = token.getTokenValue();
 
-        assertEquals(user.getPassword(), "encoded_password");
-        verify(repository, times(1)).save(user);
-    }
+        when(tokenRepository.findByTokenValue(tokenValue)).thenReturn(Optional.of(token));
 
-    @Test
-    void startAccountRecovery_tokenIsSaved() {
-        when(repository.findByEmailAddress(anyString())).thenReturn(Optional.of(user));
-        when(tokenRepository.save(any(RecoveryToken.class))).then(returnsFirstArg());
-        service.startAccountRecovery("test@example.com");
-
-        verify(tokenRepository, times(1)).save(any(RecoveryToken.class));
-    }
-
-    @Test
-    void startAccountRecovery_whenEmailAddressNotFound_noTokenIsSaved() {
-        when(repository.findByEmailAddress(anyString())).thenReturn(Optional.empty());
-        when(tokenRepository.save(any(RecoveryToken.class))).then(returnsFirstArg());
-        service.startAccountRecovery("no-exist@example.com");
-
-        verify(tokenRepository, times(0)).save(any(RecoveryToken.class));
-    }
-
-    @Test
-    void validateAccountRecoveryToken_whenValid_returnsTrue() {
-        when(tokenRepository.findByTokenValue(anyString())).thenAnswer(invocation -> {
-            String tokenValue = invocation.getArgument(0);
-            return Optional.of(new RecoveryToken(user, tokenValue));
-        });
-
-        assertTrue(service.validateAccountRecoveryToken("token-value"));
-    }
-
-    @Test
-    void validateAccountRecoveryToken_whenInvalid_returnsFalse() {
-        when(tokenRepository.findByTokenValue(anyString())).thenAnswer(invocation -> {
-            String tokenValue = invocation.getArgument(0);
-            RecoveryToken token = new RecoveryToken(user, tokenValue);
-            token.setExpiresAt(Instant.now().minus(1, ChronoUnit.DAYS));
-            token.setConsumed(true);
-            token.setConsumedAt(Instant.now().minus(3, ChronoUnit.HALF_DAYS));
-            return Optional.of(token);
-        });
-
-        assertFalse(service.validateAccountRecoveryToken("token-value"));
-    }
-
-    @Test
-    void validateAccountRecoveryToken_whenNotFound_returnsFalse() {
-        when(tokenRepository.findByTokenValue(anyString())).thenReturn(Optional.empty());
-        assertFalse(service.validateAccountRecoveryToken("token-value"));
-    }
-
-    @Test
-    public void resetAccountPassword_setsNewPassword() {
-        var token = new RecoveryToken(user, "token-value");
-        var password = "password";
-        var expectedPassword = "encoded-password";
-
-        when(tokenRepository.findByTokenValue("token-value")).thenReturn(Optional.of(token));
-        when(passwordEncoder.encode(anyString())).thenAnswer(invocation -> {
-            String p = invocation.getArgument(0);
-            return "encoded-" + p;
-        });
-
-        assertDoesNotThrow(() -> service.resetAccountPassword(password, "token-value"));
-        assertEquals(expectedPassword, user.getPassword());
+        assertDoesNotThrow(() -> userService.confirmRegistration(tokenValue));
         assertTrue(token.isConsumed());
-        assertTrue(token.getConsumedAt().isPresent());
-        verify(repository, times(1)).save(user);
+        assertTrue(user.isEnabled());
     }
 
     @Test
-    public void resetAccountPassword_whenTokenNotFound_throwsException() {
-        when(tokenRepository.findByTokenValue(anyString())).thenReturn(Optional.empty());
-        var e = assertThrows(TokenInvalidException.class, () -> {
-            service.resetAccountPassword("test", "token");
-        });
+    void confirmRegistration_whenExpired_throwsExpiredTokenException() {
+        var token = createToken(ActionType.CONFIRM_EMAIL);
+        var tokenValue = token.getTokenValue();
+        token.setExpiresAt(Instant.now().minus(1, ChronoUnit.DAYS));
 
-        assertEquals("token value is invalid", e.getMessage());
+        when(tokenRepository.findByTokenValue(tokenValue)).thenReturn(Optional.of(token));
+
+        assertThrows(ExpiredTokenException.class, () -> userService.confirmRegistration(tokenValue));
     }
 
     @Test
-    public void resetAccountPassword_whenTokenInvalid_throwsException() {
-        when(tokenRepository.findByTokenValue(anyString())).thenAnswer(invocation -> {
-            String tokenValue = invocation.getArgument(0);
-            RecoveryToken token = new RecoveryToken(user, tokenValue);
-            token.setExpiresAt(Instant.now().minus(1, ChronoUnit.DAYS));
-            return Optional.of(token);
-        });
+    void confirmRegistration_whenExpired_throwsInvalidTokenException() {
+        var token = createToken(ActionType.CONFIRM_EMAIL);
+        var tokenValue = token.getTokenValue();
+        token.setConsumed(true);
 
-        var e = assertThrows(TokenInvalidException.class, () -> {
-            service.resetAccountPassword("test", "token");
-        });
+        when(tokenRepository.findByTokenValue(tokenValue)).thenReturn(Optional.of(token));
 
-        assertEquals("token is invalid or has expired", e.getMessage());
+        assertThrows(InvalidTokenException.class, () -> userService.confirmRegistration(tokenValue));
+    }
+
+    @Test
+    void confirmRegistration_invalidTokenType_throwsInvalidTokenException() {
+        var token = createToken(ActionType.RECOVER_ACCOUNT);
+        var tokenValue = token.getTokenValue();
+
+        when(tokenRepository.findByTokenValue(tokenValue)).thenReturn(Optional.of(token));
+
+        assertThrows(InvalidTokenException.class, () -> userService.confirmRegistration(tokenValue));
+    }
+
+    @Test
+    void startAccountRecovery() throws Exception {
+        when(userRepository.findByEmailAddress(emailAddress)).thenReturn(Optional.of(user));
+        when(tokenRepository.save(any(UserActionToken.class))).then(returnsFirstArg());
+
+        userService.startAccountRecovery(emailAddress);
+
+        verify(tokenRepository, times(1)).save(any(UserActionToken.class));
+        verify(mailService, times(1)).sendAccountRecoveryMail(eq(user), any(UserActionToken.class));
+    }
+
+    @Test
+    void startAccountRecovery_whenEmailNotFound_doNothing() throws Exception {
+        when(userRepository.findByEmailAddress(emailAddress)).thenReturn(Optional.empty());
+
+        userService.startAccountRecovery(emailAddress);
+
+        verifyNoInteractions(tokenRepository);
+        verifyNoInteractions(mailService);
+    }
+
+    @Test
+    void resetPassword() throws Exception {
+        var token = createToken(ActionType.RECOVER_ACCOUNT);
+        var newPassword = "new-password";
+
+        when(tokenRepository.findByTokenValue(token.getTokenValue())).thenReturn(Optional.of(token));
+        when(passwordEncoder.encode(newPassword)).thenReturn("encoded-password");
+
+        userService.resetPassword(newPassword, token.getTokenValue());
+        assertTrue(token.isConsumed());
+        assertEquals("encoded-password", user.getPassword());
     }
 }

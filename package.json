@@ -1,13 +1,18 @@
 {
   "name": "zeldaspeedruns",
   "version": "1.0.0",
-  "private": true,
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "build": "sass --load-path=node_modules src/main/scss/index.scss target/classes/static/index.css",
-    "watch": "sass --watch --load-path=node_modules src/main/scss/index.scss target/classes/static/index.css"
+    "watch": "sass -I node_modules --watch src/main/scss/index.scss target/classes/static/styles.css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "sass": "^1.53.0"
   },
   "dependencies": {
-    "sass": "^1.53.0",
     "normalize.css": "^8.0.1"
   }
 }

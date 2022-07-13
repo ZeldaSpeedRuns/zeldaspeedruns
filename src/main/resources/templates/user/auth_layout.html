@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Auth Layout</title>
+</head>
+<body>
+<header class="" layout:fragment="header"></header>
+<main layout:fragment="content" class="auth-box">
+    <div class="auth-wrapper" layout:fragment="body">
+        <form layout:fragment="form"></form>
+    </div>
+</main>
+<footer class="" layout:fragment="footer"></footer>
+</body>
+</html>

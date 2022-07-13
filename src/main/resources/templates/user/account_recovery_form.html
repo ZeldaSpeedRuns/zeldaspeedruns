@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{user/auth_layout}">
+<head>
+    <title th:text="#{user.account-recovery.title}">Account Recovery</title>
+</head>
+<body>
+<form method="post" action="#" class="auth-form" layout:fragment="form"
+      th:action="${#mvc.url('ZUC#postAccountRecoveryForm').build()}" th:object="${form}">
+    <div class="auth-form__header">
+        <a th:href="@{/}">
+            <img src="../../static/logo.svg" alt="ZSR logo" class="auth-logo"
+                 th:src="@{/logo.svg}" th:alt="#{zeldaspeedruns.name}"/>
+        </a>
+
+        <h1 class="auth-form__title" th:text="#{user.account-recovery.form.title}">
+            Recover Account
+        </h1>
+        <p class="auth-form__message" th:text="#{user.account-recovery.form.message}">
+            Form message
+        </p>
+    </div>
+
+    <ul class="form-error-list" th:if="${#fields.hasGlobalErrors()}">
+        <li th:errors="*"></li>
+    </ul>
+
+    <div class="form-group">
+        <div class="form-field">
+            <label for="email-address" class="form-field__label"
+                   th:text="#{user.account-recovery.form.email-address.label}">
+                Email address
+            </label>
+            <input type="email" id="email-address" class="input" required autofocus
+                   placeholder="email@example.com" th:placeholder="#{user.form.email-address.placeholder}"
+                   th:field="*{emailAddress}" th:errorclass="input--error" />
+
+            <ul th:if="${#fields.hasErrors('emailAddress')}" class="form-field__error-list">
+                <li th:errors="*{emailAddress}"></li>
+            </ul>
+        </div>
+
+        <button type="submit" class="button button--max auth-submit"
+                th:text="#{user.account-recovery.form.submit}">
+            Submit
+        </button>
+    </div>
+
+    <div class="form-group auth-form__footer">
+        <div><a href="#" th:href="@{/user/login}"
+                th:text="#{user.links.return-to-sign-in}">
+            Return to log in page
+        </a></div>
+    </div>
+</form>
+</body>
+</html>

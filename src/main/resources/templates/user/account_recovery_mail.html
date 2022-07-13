@@ -1,0 +1,40 @@
+<!-- TODO: Make this look nice! -->
+
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{user.account-recovery.mail.subject}">Registration successful</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            color: #ececec;
+            background-color: #1b1b32;
+            font-family: sans-serif;
+        }
+
+        a {
+            color: #fdd653;
+        }
+    </style>
+</head>
+<body>
+<h1 th:text="#{user.account-recovery.mail.subject}">Thank you for registering with ZSR</h1>
+<p th:text="#{user.account-recovery.mail.greeting(${user.username})}">Hi there, user!</p>
+<p th:text="#{user.account-recovery.mail.instructions}">
+    Thank you for registering with ZeldaSpeedRuns. Before you can use your new account, you must confirm
+    your account by clicking on the link below.
+</p>
+<a href="#" th:href="${#mvc.url('ZUC#getPasswordResetForm').arg(0, tokenValue).build()}"
+   th:text="#{user.account-recovery.mail.reset-password}">
+    Confirm your account!
+</a>
+<h2 th:text="#{user.account-recovery.mail.unauthorized-request.title}">I didn't do this</h2>
+<p th:text="#{user.account-recovery.mail.unauthorized-request.message}">Words, words, words.</p>
+<p th:text="#{mail.regards}">Good luck and go fast,</p>
+<p th:text="#{mail.signature}">ZSR</p>
+</body>
+</html>

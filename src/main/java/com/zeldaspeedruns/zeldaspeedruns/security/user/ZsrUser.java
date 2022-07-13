@@ -1,7 +1,5 @@
 package com.zeldaspeedruns.zeldaspeedruns.security.user;
 
-import com.zeldaspeedruns.zeldaspeedruns.core.AbstractUuidEntity;
-import lombok.ToString;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -10,46 +8,45 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "users")
-@ToString(onlyExplicitlyIncluded = true)
-public class ZsrUser extends AbstractUuidEntity {
-    public final static int USERNAME_MAX_LENGTH = 32;
-    public final static int EMAIL_MAX_LENGTH = 128;
-
+public class ZsrUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", nullable = false, updatable = false)
-    @ToString.Include
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NaturalId(mutable = true)
-    @Column(name = "username", unique = true, nullable = false, length = USERNAME_MAX_LENGTH)
-    @ToString.Include
+    @NaturalId
+    @Column(name = "uuid", nullable = false, unique = true, updatable = false)
+    private final UUID uuid = UUID.randomUUID();
+
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @Column(name = "email_address", unique = true, length = EMAIL_MAX_LENGTH)
+    @Column(name = "email_address", nullable = false, unique = true)
     private String emailAddress;
 
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "is_superuser", nullable = false)
+    private Boolean superuser = false;
+
     @Column(name = "is_enabled", nullable = false)
     private Boolean enabled = true;
-
-    @Column(name = "is_administrator", nullable = false)
-    private Boolean administrator = false;
 
     protected ZsrUser() {
     }
 
     public ZsrUser(String username, String emailAddress, String password) {
         this.username = Objects.requireNonNull(username, "username must not be null");
-        ;
-        this.emailAddress = Objects.requireNonNull(emailAddress, "email address must not be null");
+        this.emailAddress = Objects.requireNonNull(emailAddress, "emailAddress must not be null");
         this.password = Objects.requireNonNull(password, "password must not be null");
     }
 
     public Long getId() {
         return id;
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 
     public String getUsername() {
@@ -65,7 +62,7 @@ public class ZsrUser extends AbstractUuidEntity {
     }
 
     public void setEmailAddress(String emailAddress) {
-        this.emailAddress = Objects.requireNonNull(emailAddress, "email address must not be null");
+        this.emailAddress = Objects.requireNonNull(emailAddress, "emailAddress must not be null");
     }
 
     public String getPassword() {
@@ -76,6 +73,14 @@ public class ZsrUser extends AbstractUuidEntity {
         this.password = Objects.requireNonNull(password, "password must not be null");
     }
 
+    public boolean isSuperuser() {
+        return superuser;
+    }
+
+    public void setSuperuser(boolean superuser) {
+        this.superuser = superuser;
+    }
+
     public boolean isEnabled() {
         return enabled;
     }
@@ -84,11 +89,15 @@ public class ZsrUser extends AbstractUuidEntity {
         this.enabled = enabled;
     }
 
-    public boolean isAdministrator() {
-        return administrator;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ZsrUser zsrUser)) return false;
+        return Objects.equals(uuid, zsrUser.uuid);
     }
 
-    public void setAdministrator(boolean administrator) {
-        this.administrator = administrator;
+    @Override
+    public int hashCode() {
+        return Objects.hash(uuid);
     }
 }

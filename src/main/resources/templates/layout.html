@@ -11,13 +11,13 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@400;600;700&family=Poppins:wght@300;400;600;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
 
-    <link th:href="@{/index.css}" rel="stylesheet">
+    <link th:href="@{/styles.css}" rel="stylesheet">
 </head>
 <body>
-<header class="header">
+<header class="header" layout:fragment="header">
     <nav role="navigation" class="navigation-menu">
         <div class="navigation-menu__item">
             <a th:href="@{/}">
@@ -48,7 +48,7 @@
 
 <main layout:fragment="content"></main>
 
-<footer class="footer">
+<footer class="footer" layout:fragment="footer">
     <div class="footer__copyright">
         &copy; <span th:text="${#dates.year(#dates.createNow())}">2022</span>
         ZeldaSpeedRuns, All Rights Reserved

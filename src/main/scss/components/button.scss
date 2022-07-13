@@ -3,7 +3,9 @@
 .button {
   border: none;
   border-radius: 3px;
+  box-sizing: border-box;
   padding: 10px 20px;
+  cursor: pointer;
 
   font-family: $font-stack;
   font-size: 1.1em;

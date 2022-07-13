@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{user/auth_layout}">
+<head>
+  <title th:text="#{user.confirm-email.title}">Email confirmation</title>
+</head>
+<body>
+<div layout:fragment="body" class="auth-wrapper auth-wrapper--wide">
+  <div class="auth-dialog">
+    <a th:href="@{/}">
+      <img src="../../static/logo.svg" alt="ZSR logo" class="auth-logo"
+           th:src="@{/logo.svg}" th:alt="#{zeldaspeedruns.name}"/>
+    </a>
+
+    <h1 class="auth-dialog__title"
+        th:text="#{user.confirm-email.dialog.title}">
+      Thank you for confirming your email!
+    </h1>
+
+    <div class="form-group auth-form__footer">
+      <div><a href="#" th:href="@{/user/login}" th:text="#{user.links.return-to-sign-in}">
+        Click here to sign in
+      </a></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

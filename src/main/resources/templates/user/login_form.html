@@ -1,61 +1,88 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      layout:decorate="~{user/auth_layout}">
 <head>
-    <title>Sign in with ZSR</title>
+    <title th:text="#{user.login.title}">Sign in with ZeldaSpeedRuns</title>
 </head>
 <body>
-<main layout:fragment="content">
-    <div class="dialog-wrapper">
-        <form method="post" th:action="@{/user/login}" class="vertical-form">
-            <img src="../../static/logo.svg" th:src="@{/logo.svg}" alt="ZSR Logo"
-                 class="vertical-form__header-image" width="100" height="100"/>
-
-            <h1 class="vertical-form__header">Sign in with ZSR</h1>
-
-            <div class="form-field">
-                <label for="username" class="input__label">Username</label>
-                <input type="text" id="username" name="username" class="input"
-                       required autofocus/>
-            </div>
-
-            <div class="form-field">
-                <label for="password" class="input__label">Password</label>
-                <input type="password" id="password" name="password" class="input"
-                       required/>
-            </div>
-
-            <div class="form-button-group">
-                <input type="submit" class="button button--max"
-                       value="Sign in"/>
-            </div>
-
-            <div class="horizontal-line">
-                <span class="horizontal-line__label">Or sign in with</span>
-            </div>
-
-            <div class="provider-list">
-                <div class="provider-icon provider-icon--discord">
-                    <img th:src="@{/images/providers/provider-discord.svg}" alt="Discord"
-                         class="provider-icon__image"/>
-                </div>
-                <div class="provider-icon provider-icon--twitch">
-                    <img th:src="@{/images/providers/provider-twitch.svg}" alt="Twitch"
-                         class="provider-icon__image"/>
-                </div>
-            </div>
-
-            <ul class="link-list">
-                <li class="link-list__item">Don&apos;t have an account?
-                    <a th:href="@{/user/register}">Register now.</a></li>
-                <li class="link-list__item">Forgot your credentials?
-                    <a th:href="@{/user/recover-account}">Recover your account.</a></li>
-            </ul>
-        </form>
+<form method="post" action="#" class="auth-form" layout:fragment="form"
+      th:action="@{/user/login}">
+    <div class="auth-form__header">
+        <a th:href="@{/}">
+            <img src="../../static/logo.svg" alt="ZSR logo" class="auth-logo"
+                 th:src="@{/logo.svg}" th:alt="#{zeldaspeedruns.name}"/>
+        </a>
+        <h1 class="auth-form__title" th:text="#{user.login.form.title}">
+            Sign in with ZSR
+        </h1>
     </div>
-</main>
+
+    <ul class="form-error-list" th:if="${param.error}">
+        <li th:text="#{user.login.error.invalid-credentials}"></li>
+    </ul>
+
+    <div class="form-group">
+        <div class="form-field">
+            <label for="username" class="form-field__label"
+                   th:text="#{user.login.form.username.label}">
+                Username
+            </label>
+            <input type="text" id="username" name="username" class="input" required autofocus
+                   placeholder="Username" th:placeholder="#{user.form.username.placeholder}"/>
+        </div>
+
+        <div class="form-field">
+            <label for="password" class="form-field__label"
+                   th:text="#{user.login.form.password.label}">
+                Username
+            </label>
+            <input type="password" id="password" name="password" class="input" required
+                   placeholder="Password" th:placeholder="#{user.form.password.placeholder}"/>
+        </div>
+
+        <button type="submit" class="button button--max auth-submit"
+                th:text="#{user.login.form.submit}">
+            Sign in
+        </button>
+    </div>
+
+    <div class="horizontal-line auth-form__line"
+         th:text="#{user.login.third-party.line-label}">
+        Or sign in with
+    </div>
+
+    <div class="provider-list">
+        <div class="provider-icon provider-icon--discord"
+             th:title="#{user.third-party-provider.discord.title}">
+            <img src="../../static/images/providers/provider-discord.svg" alt="Discord"
+                 class="provider-icon__image"
+                 th:alt="#{user.third-party-provider.discord}"
+                 th:src="@{/images/providers/provider-discord.svg}"/>
+        </div>
+        <div class="provider-icon provider-icon--twitch"
+             th:title="#{user.third-party-provider.twitch.title}">
+            <img src="../../static/images/providers/provider-twitch.svg" alt="Twitch"
+                 class="provider-icon__image"
+                 th:alt="#{user.third-party-provider.twitch}"
+                 th:src="@{/images/providers/provider-twitch.svg}"/>
+        </div>
+    </div>
+
+    <div class="form-group auth-form__footer">
+        <div>
+            <a href="#" th:href="${#mvc.url('ZUC#getRegisterForm').build()}"
+               th:text="#{user.login.links.register}">
+                Sign up for a ZSR account
+            </a></div>
+        <div>
+            <a href="#" th:href="${#mvc.url('ZUC#getAccountRecoveryForm').build()}"
+               th:text="#{user.login.links.forgot-credentials}">
+                Recover username and password
+            </a>
+        </div>
+    </div>
+</form>
 </body>
 </html>
