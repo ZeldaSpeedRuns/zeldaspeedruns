@@ -58,6 +58,13 @@ public class ZsrUserServiceImpl implements ZsrUserService {
     }
 
     @Override
+    public ZsrUser loadByEmailAddress(String emailAddress) throws EmailNotFoundException {
+        return userRepository
+                .findByEmailAddress(emailAddress)
+                .orElseThrow(() -> new EmailNotFoundException(String.format("no user with email address '%s' exists", emailAddress)));
+    }
+
+    @Override
     @Transactional
     public ZsrUser createUser(String username, String emailAddress, String password) throws UsernameInUseException, EmailInUseException {
         if (userRepository.existsByUsername(username)) {

@@ -17,6 +17,7 @@
 		<java.version>17</java.version>
 		<hibernate-types.version>2.16.2</hibernate-types.version>
 		<testcontainers.version>1.17.3</testcontainers.version>
+		<passay.version>1.6.1</passay.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -60,6 +61,11 @@
 			<groupId>com.vladmihalcea</groupId>
 			<artifactId>hibernate-types-55</artifactId>
 			<version>${hibernate-types.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.passay</groupId>
+			<artifactId>passay</artifactId>
+			<version>${passay.version}</version>
 		</dependency>
 
 		<dependency>

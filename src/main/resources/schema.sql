@@ -1,3 +1,4 @@
+drop table if exists oauth2_linked_accounts;
 drop table if exists user_action_tokens;
 drop table if exists users;
 
@@ -17,6 +18,7 @@ create table if not exists users
 create unique index if not exists users_username_ci_idx on users (upper(username));
 create unique index if not exists users_email_ci_idx on users (upper(email_address));
 
+
 drop type if exists user_action;
 create type user_action as enum ('CONFIRM_EMAIL', 'RECOVER_ACCOUNT');
 
@@ -29,6 +31,21 @@ create table if not exists user_action_tokens
     expires_at timestamp with time zone not null,
     consumed   boolean                  not null default false,
     constraint fk_registration_token_user
+        foreign key (user_id) references users (id)
+            on delete cascade
+            on update cascade
+);
+
+
+create table if not exists oauth2_linked_accounts
+(
+    id              bigint primary key generated always as identity,
+    user_id         bigint      not null,
+    registration_id varchar(64) not null,
+    subject         varchar(64) not null,
+    name            varchar(64) not null,
+    constraint uk_registration_id_subject unique (registration_id, subject),
+    constraint fk_linked_account_user
         foreign key (user_id) references users (id)
             on delete cascade
             on update cascade

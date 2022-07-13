@@ -96,20 +96,24 @@
     </div>
 
     <div class="provider-list">
-        <div class="provider-icon provider-icon--discord"
-             th:title="#{user.third-party-provider.discord.title}">
-            <img src="../../static/images/providers/provider-discord.svg" alt="Discord"
-                 class="provider-icon__image"
-                 th:alt="#{user.third-party-provider.discord}"
-                 th:src="@{/images/providers/provider-discord.svg}"/>
-        </div>
-        <div class="provider-icon provider-icon--twitch"
-             th:title="#{user.third-party-provider.twitch.title}">
-            <img src="../../static/images/providers/provider-twitch.svg" alt="Twitch"
-                 class="provider-icon__image"
-                 th:alt="#{user.third-party-provider.twitch}"
-                 th:src="@{/images/providers/provider-twitch.svg}"/>
-        </div>
+        <a href="#" th:href="@{/user/login/oauth2/authorization/discord}">
+            <div class="provider-icon provider-icon--discord"
+                 th:title="#{user.third-party-provider.discord.title}">
+                <img src="../../static/images/providers/provider-discord.svg" alt="Discord"
+                     class="provider-icon__image"
+                     th:alt="#{user.third-party-provider.discord}"
+                     th:src="@{/images/providers/provider-discord.svg}"/>
+            </div>
+        </a>
+        <a href="#" th:href="@{/user/login/oauth2/authorization/twitch}">
+            <div class="provider-icon provider-icon--twitch"
+                 th:title="#{user.third-party-provider.twitch.title}">
+                <img src="../../static/images/providers/provider-twitch.svg" alt="Twitch"
+                     class="provider-icon__image"
+                     th:alt="#{user.third-party-provider.twitch}"
+                     th:src="@{/images/providers/provider-twitch.svg}"/>
+            </div>
+        </a>
     </div>
 
     <div class="form-group auth-form__footer">

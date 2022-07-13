@@ -14,6 +14,8 @@ public interface ZsrUserService {
      */
     ZsrUser loadByUsername(String username) throws UsernameNotFoundException;
 
+    ZsrUser loadByEmailAddress(String emailAddress) throws EmailNotFoundException;
+
     /**
      * Creates and saves a new user to the persistent storage.
      *
