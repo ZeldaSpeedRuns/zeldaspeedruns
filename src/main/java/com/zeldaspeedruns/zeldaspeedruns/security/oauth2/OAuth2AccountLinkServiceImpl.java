@@ -118,7 +118,7 @@ public class OAuth2AccountLinkServiceImpl implements OAuth2AccountLinkService {
                 registration.getRegistrationId(), linkRequest.getSubject());
 
         return loadAccountLink(linkRequest, registration)
-                .orElse(linkAccount(linkRequest, registration, true, true));
+                .orElseGet(() ->linkAccount(linkRequest, registration, true, true));
     }
 
     @Override
@@ -137,6 +137,6 @@ public class OAuth2AccountLinkServiceImpl implements OAuth2AccountLinkService {
                 registration.getRegistrationId(), linkRequest.getSubject());
 
         return loadAccountLink(linkRequest, registration)
-                .orElse(linkAccount(linkRequest, registration, true, true));
+                .orElseGet(() ->linkAccount(linkRequest, registration, true, true));
     }
 }
