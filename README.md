@@ -26,13 +26,57 @@ After the command has finished, you can start the Spring Boot application like s
 java -jar target/zeldaspeedruns-{VERSION}.jar
 ```
 
+## Configuration
+
+### Database
+
+This application is designed to run against a PostgreSQL Database only. You can find a schema file in the resources
+directory at `src/main/resources/schema.sql` which can be used to initialize a database for the ZeldaSpeedRuns 
+application. During development, we recommend using Docker to spin up a PostgreSQL image.
+
+To help the application find the database, 
+[you need to set some configuration parameters.](https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.external-config)
+The linked article contains instructions on how to do so, but the easiest way by far is through OS environment
+variables:
+
+```shell
+export SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:49153/postgres
+export SPRING_DATASOURCE_USERNAME=postgres 
+export SPRING_DATASOURCE_PASSWORD=postgrespw
+```
+
+Or by using command line arguments:
+
+```shell
+java -jar zeldaspeedruns-<version>.jar \ 
+    --spring.datasource.url=jdbc:postgresql://localhost:49153/postgres \
+    --spring.datasource.username=postgres \
+    --spring.datasource.password=postgrespw
+```
+
+### Twitch and Discord Authentication
+
+The application provides Twitch and Discord integration. To make these features work you must create a Discord and 
+Twitch API key. See the developer API documentation for these services on how to do that. Once you have done so, obtain
+your client ID and secret. You can pass these to the applications as follows:
+
+```shell
+export SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_DISCORD_CLIENT_ID=discordclientid
+export SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_DISCORD_CLIENT_SECRET=discord-secret
+export SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_DISCORD_TWITCH_ID=twitchlientid
+export SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_DISCORD_TWITCH_SECRET=twitch-secret
+```
+
+Currently, the application will not work without these. For development reasons we'll be looking for a more graceful 
+way to disable these features.
+
 ## Development
 
 This application comes with Spring Boot DevTools enabled by default, allowing you the benefits they provide during
 development. Refer to the documentation of Spring Boot DevTools for more information on how to use it and how to 
 disable it for production.
 
-### Recompile SCSS stylesheets
+### Recompile SCSS Stylesheets
 
 The project makes use of Sass for stylesheets, but these will not be automatically recompiled by the DevTools, as it is
 not aware of the presence of Maven and Node. As a result, you may experience missing stylesheets when checking the 

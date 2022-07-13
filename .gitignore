@@ -36,5 +36,5 @@ build/
 node_modules/
 
 ### Do not include Spring Application properties ###
-src/main/resources/application.properties
+src/main/resources/application.yml
 src/main/resources/application.yml

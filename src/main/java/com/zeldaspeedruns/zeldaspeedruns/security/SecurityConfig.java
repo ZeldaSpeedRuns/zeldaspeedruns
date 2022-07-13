@@ -20,10 +20,19 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity)  throws Exception{
         httpSecurity
                 .authorizeRequests(requests -> {
-                    requests.mvcMatchers("/api/user/register").permitAll();
+                    requests.anyRequest().permitAll();
                 })
                 .formLogin(formLogin -> {
                     formLogin.loginPage("/user/login");
+                })
+                .oauth2Login(oauth2 -> {
+                    oauth2.loginPage("/user/login");
+                    oauth2.authorizationEndpoint(endpoint -> {
+                        endpoint.baseUri("/user/login/oauth2/authorization");
+                    });
+                    oauth2.redirectionEndpoint(endpoint -> {
+                        endpoint.baseUri("/user/login/oauth2/callback/*");
+                    });
                 });
 
         return httpSecurity.build();
