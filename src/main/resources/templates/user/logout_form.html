@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{user/auth_layout}">
+<head>
+    <title th:text="#{user.logout.title}">Sign out</title>
+</head>
+<body>
+<form method="post" action="#" class="auth-form" layout:fragment="form"
+      th:action="@{/user/logout}">
+    <div class="auth-form__header">
+        <a th:href="@{/}">
+            <img src="../../static/logo.svg" alt="ZSR logo" class="auth-logo"
+                 th:src="@{/logo.svg}" th:alt="#{zeldaspeedruns.name}"/>
+        </a>
+        <h1 class="auth-form__title" th:text="#{user.logout.form.title}">
+            Are you sure?
+        </h1>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="button button--max auth-submit"
+                th:text="#{user.logout.form.submit}">
+            Sign in
+        </button>
+    </div>
+</form>
+</body>
+</html>

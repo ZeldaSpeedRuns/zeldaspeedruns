@@ -25,6 +25,10 @@ public class SecurityConfig {
                 .formLogin(formLogin -> {
                     formLogin.loginPage("/user/login");
                 })
+                .logout(logout -> {
+                    logout.logoutUrl("/user/logout");
+                    logout.clearAuthentication(true);
+                })
                 .oauth2Login(oauth2 -> {
                     oauth2.loginPage("/user/login");
                     oauth2.authorizationEndpoint(endpoint -> {

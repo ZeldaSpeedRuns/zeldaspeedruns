@@ -25,6 +25,11 @@ public class ZsrUserController {
         return "user/login_form";
     }
 
+    @GetMapping("/logout")
+    public String getLogoutForm() {
+        return "user/logout_form";
+    }
+
     @GetMapping("/register")
     public String getRegisterForm(@ModelAttribute("form") RegisterUserForm form) {
         return "user/register_form";

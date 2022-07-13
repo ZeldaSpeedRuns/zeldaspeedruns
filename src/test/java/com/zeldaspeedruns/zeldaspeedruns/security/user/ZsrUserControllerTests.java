@@ -7,7 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.util.LinkedMultiValueMap;
@@ -20,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(ZsrUserController.class)
 @Import(SecurityConfig.class)
+@TestPropertySource("classpath:application-testing.properties")
 class ZsrUserControllerTests {
     @Autowired
     private MockMvc mvc;
@@ -48,6 +53,13 @@ class ZsrUserControllerTests {
         mvc.perform(get("/user/login"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("user/login_form"));
+    }
+
+    @Test
+    void getLogoutForm() throws Exception {
+        mvc.perform(get("/user/logout"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("user/logout_form"));
     }
 
     @Test
