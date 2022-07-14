@@ -11,7 +11,8 @@ public class TwitchAccountLinkRequestConverter implements Converter<OidcUser, Ac
         String emailAddress = user.getEmail();
         Boolean emailVerified = user.getEmailVerified();
 
-        preferredUsername = preferredUsername.replaceAll("[^\\w]", "");
-        return new AccountLinkRequest(subject, preferredUsername, emailAddress, emailVerified);
+        var linkRequest = new  AccountLinkRequest(subject, preferredUsername, emailAddress, emailVerified);
+        linkRequest.addUsernameCandidate(preferredUsername.replaceAll("[^\\w]", ""));
+        return linkRequest;
     }
 }

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title th:text="#{ucp.account-details.title}">Account Management</title>
+</head>
+<body>
+<main layout:fragment="content" class="container ucp-container">
+    <section class="ucp-content">
+        <h1 th:text="#{ucp.account-details.heading}">Account Details</h1>
+        <div class="ucp-card">
+            <div class="ucp-card__header row">
+                <h2 class="grow" th:text="#{ucp.account-details.account.heading}">
+                    Account Information
+                </h2>
+                <button class="button" th:text="#{label.modify}">Modify</button>
+            </div>
+            <div class="ucp-card__body">
+                <div class="row margin-y-sm">
+                    <div class="col grow">
+                        <div class="ucp-label" th:text="#{user.label.username}">
+                            Username
+                        </div>
+                        <div class="ucp-value" th:text="${user.username}">Spell</div>
+                    </div>
+                </div>
+                <div class="row margin-y-sm">
+                    <div class="col grow">
+                        <div class="ucp-label" th:text="#{user.label.email-address}">
+                            Email address
+                        </div>
+                        <div class="ucp-value" th:text="${user.emailAddress}">***********@icloud.com</div>
+                    </div>
+                </div>
+                <div class="row margin-y-sm">
+                    <div class="col grow">
+                        <div class="ucp-label" th:text="#{user.label.password}">
+                            Password
+                        </div>
+                        <div class="ucp-value">&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ucp-card">
+            <div class="ucp-card__header row">
+                <h2 class="grow" th:text="#{ucp.account-details.linked-accounts.heading}">
+                    Linked Accounts
+                </h2>
+            </div>
+            <div class="ucp-card__body">
+                <div class="text-center" th:if="${accountLinks.isEmpty()}"
+                     th:text="#{ucp.account-details.linked-accounts.no-links}">
+                    You have no linked accounts.
+                </div>
+                <div class="row margin-y-sm" th:each="link : ${accountLinks}" th:with="provider=${link.registrationId}">
+                    <img src="#" alt="Provider logo" class="ucp-provider-logo"
+                         th:alt="#{${'user.third-party-provider.' + provider}}"
+                         th:src="${'/images/providers/provider-'+ provider + '.svg'}">
+                    <span class="ucp-provider-name" th:text="#{${'user.third-party-provider.' + provider}}">
+                        Provider
+                    </span>
+                    <span class="ucp-provider-username grow" th:text="${link.name}">
+                        Name
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

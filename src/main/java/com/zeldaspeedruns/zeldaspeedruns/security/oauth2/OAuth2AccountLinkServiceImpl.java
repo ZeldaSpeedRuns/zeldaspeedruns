@@ -12,6 +12,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -68,7 +69,7 @@ public class OAuth2AccountLinkServiceImpl implements OAuth2AccountLinkService {
             if (createUser) {
                 logger.debug("attempting to create user for registration {} with subject {}",
                         registration.getRegistrationId(), request.getSubject());
-                request.addUsernameCandidate(request.getPreferredUsername() + "_" + registration.getRegistrationId());
+                request.addUsernameCandidate(request.getUsername() + "_" + registration.getRegistrationId());
                 user = createUserFromRequest(request);
                 logger.debug("created new user {}", user.getUsername());
             } else {
@@ -80,7 +81,7 @@ public class OAuth2AccountLinkServiceImpl implements OAuth2AccountLinkService {
                 user,
                 registration.getRegistrationId(),
                 request.getSubject(),
-                request.getPreferredUsername());
+                request.getUsername());
 
         logger.debug("created new account link for user {} to registration {}",
                 user.getUsername(), registration.getRegistrationId());
@@ -96,7 +97,7 @@ public class OAuth2AccountLinkServiceImpl implements OAuth2AccountLinkService {
             logger.debug("found matching account link for registration {} matching user {}",
                     registration.getRegistrationId(), link.getUser().getUsername());
 
-            link.setName(request.getPreferredUsername());
+            link.setName(request.getUsername());
         }
 
         return optional;
@@ -138,5 +139,10 @@ public class OAuth2AccountLinkServiceImpl implements OAuth2AccountLinkService {
 
         return loadAccountLink(linkRequest, registration)
                 .orElseGet(() ->linkAccount(linkRequest, registration, true, true));
+    }
+
+    @Override
+    public List<OAuth2AccountLink> getAccountLinksForUser(ZsrUser user) {
+        return linkRepository.findAllByUser(user);
     }
 }
