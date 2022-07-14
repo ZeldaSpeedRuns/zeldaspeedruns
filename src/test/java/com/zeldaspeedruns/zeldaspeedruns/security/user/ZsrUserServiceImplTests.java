@@ -54,7 +54,7 @@ class ZsrUserServiceImplTests {
 
     @Test
     void loadByUsername() {
-        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
+        when(userRepository.findByUsernameIgnoreCase(username)).thenReturn(Optional.of(user));
 
         var returned = assertDoesNotThrow(() -> userService.loadByUsername(username));
         assertEquals(returned, user);
@@ -62,14 +62,14 @@ class ZsrUserServiceImplTests {
 
     @Test
     void loadByUsername_whenNotFound_throwsUsernameNotFoundException() {
-        when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
+        when(userRepository.findByUsernameIgnoreCase(username)).thenReturn(Optional.empty());
         assertThrows(UsernameNotFoundException.class, () -> userService.loadByUsername(username));
     }
 
     @Test
     void createUser() {
-        when(userRepository.existsByUsername(username)).thenReturn(false);
-        when(userRepository.existsByEmailAddress(emailAddress)).thenReturn(false);
+        when(userRepository.existsByUsernameIgnoreCase(username)).thenReturn(false);
+        when(userRepository.existsByEmailAddressIgnoreCase(emailAddress)).thenReturn(false);
         when(userRepository.save(any(ZsrUser.class))).then(returnsFirstArg());
         when(passwordEncoder.encode(password)).thenReturn(encodedPassword);
 
@@ -98,7 +98,7 @@ class ZsrUserServiceImplTests {
 
     @Test
     void createUser_whenUsernameTaken_throwsUsernameInUseException() {
-        when(userRepository.existsByUsername(username)).thenReturn(true);
+        when(userRepository.existsByUsernameIgnoreCase(username)).thenReturn(true);
         assertThrows(UsernameInUseException.class, () -> {
             userService.createUser(username, emailAddress, password);
         });
@@ -109,7 +109,7 @@ class ZsrUserServiceImplTests {
 
     @Test
     void createUser_whenEmailTaken_throwsEmailInUseException() {
-        when(userRepository.existsByEmailAddress(emailAddress)).thenReturn(true);
+        when(userRepository.existsByEmailAddressIgnoreCase(emailAddress)).thenReturn(true);
         assertThrows(EmailInUseException.class, () -> {
             userService.createUser(username, emailAddress, password);
         });
@@ -177,7 +177,7 @@ class ZsrUserServiceImplTests {
 
     @Test
     void startAccountRecovery() throws Exception {
-        when(userRepository.findByEmailAddress(emailAddress)).thenReturn(Optional.of(user));
+        when(userRepository.findByEmailAddressIgnoreCase(emailAddress)).thenReturn(Optional.of(user));
         when(tokenRepository.save(any(UserActionToken.class))).then(returnsFirstArg());
 
         userService.startAccountRecovery(emailAddress);
@@ -188,7 +188,7 @@ class ZsrUserServiceImplTests {
 
     @Test
     void startAccountRecovery_whenEmailNotFound_doNothing() throws Exception {
-        when(userRepository.findByEmailAddress(emailAddress)).thenReturn(Optional.empty());
+        when(userRepository.findByEmailAddressIgnoreCase(emailAddress)).thenReturn(Optional.empty());
 
         userService.startAccountRecovery(emailAddress);
 

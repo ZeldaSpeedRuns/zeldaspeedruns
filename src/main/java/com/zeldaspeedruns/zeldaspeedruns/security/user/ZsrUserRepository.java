@@ -6,11 +6,11 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 @Repository
 public interface ZsrUserRepository extends CrudRepository<ZsrUser, Long> {
-    Optional<ZsrUser> findByUsername(String username);
+    Optional<ZsrUser> findByUsernameIgnoreCase(String username);
 
-    Optional<ZsrUser> findByEmailAddress(String emailAddress);
+    Optional<ZsrUser> findByEmailAddressIgnoreCase(String emailAddress);
 
-    boolean existsByUsername(String username);
+    boolean existsByUsernameIgnoreCase(String username);
 
-    boolean existsByEmailAddress(String emailAddress);
+    boolean existsByEmailAddressIgnoreCase(String emailAddress);
 }

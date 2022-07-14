@@ -53,25 +53,25 @@ public class ZsrUserServiceImpl implements ZsrUserService {
     @Override
     public ZsrUser loadByUsername(String username) throws UsernameNotFoundException {
         return userRepository
-                .findByUsername(username)
+                .findByUsernameIgnoreCase(username)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("no user with username '%s' exists", username)));
     }
 
     @Override
     public ZsrUser loadByEmailAddress(String emailAddress) throws EmailNotFoundException {
         return userRepository
-                .findByEmailAddress(emailAddress)
+                .findByEmailAddressIgnoreCase(emailAddress)
                 .orElseThrow(() -> new EmailNotFoundException(String.format("no user with email address '%s' exists", emailAddress)));
     }
 
     @Override
     @Transactional
     public ZsrUser createUser(String username, String emailAddress, String password) throws UsernameInUseException, EmailInUseException {
-        if (userRepository.existsByUsername(username)) {
+        if (userRepository.existsByUsernameIgnoreCase(username)) {
             throw new UsernameInUseException(String.format("user with username '%s' already exists", username));
         }
 
-        if (userRepository.existsByEmailAddress(emailAddress)) {
+        if (userRepository.existsByEmailAddressIgnoreCase(emailAddress)) {
             throw new EmailInUseException(String.format("user with email address '%s' already exists", emailAddress));
         }
 
@@ -108,7 +108,7 @@ public class ZsrUserServiceImpl implements ZsrUserService {
 
     @Override
     public void startAccountRecovery(String emailAddress) throws MessagingException {
-        var userOptional = userRepository.findByEmailAddress(emailAddress);
+        var userOptional = userRepository.findByEmailAddressIgnoreCase(emailAddress);
 
         if (userOptional.isPresent()) {
             var user = userOptional.get();
