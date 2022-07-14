@@ -14,6 +14,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
           rel="stylesheet">
 
+    <link th:href="@{/assets/fontawesome/css/all.css}" rel="stylesheet">
+
     <link th:href="@{/styles.css}" rel="stylesheet">
 </head>
 <body>
@@ -21,25 +23,36 @@
     <nav role="navigation" class="navigation-menu">
         <div class="navigation-menu__item">
             <a th:href="@{/}">
-                <img th:src="@{/logo.svg}" alt="ZSR" class="zsr-logo" />
+                <img th:src="@{/logo.svg}" alt="ZSR" class="zsr-logo"/>
             </a>
         </div>
     </nav>
 
     <div class="spacer"></div>
 
-    <div class="authentication-status" sec:authorize="isAuthenticated()">
-        <span class="authentication-status__message">
-            Hi there, <span sec:authentication="name">user</span>!
-        </span>
-        <form method="post" th:action="@{/user/logout}">
-            <button type="submit" class="button button--primary">Sign out</button>
-        </form>
-    </div>
+    <nav aria-label="User Menu" class="dropdown" sec:authorize="isAuthenticated()">
+        <button type="button" class="dropdown__button user-menu__button"
+                aria-expanded="false" aria-controls="user-menu">
+            <a sec:authentication="name">Username</a>
+            <span class="fa-solid fa-caret-down user-menu__caret"></span>
+        </button>
+        <ul class="dropdown__menu dropdown__menu--left user-menu" id="user-menu">
+            <li class="user-menu__item">
+                <a th:href="@{/user/account}">
+                    <span class="fa-solid fa-user-gear user-menu__icon"></span>
+                    <span class="user-menu__label">Account settings</span>
+                </a>
+            </li>
+            <li class="user-menu__item">
+                <a th:href="@{/user/logout}">
+                    <span class="fa-solid fa-arrow-right-from-bracket user-menu__icon"></span>
+                    <span class="user-menu__label">Sign out</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
     <div class="authentication-status" sec:authorize="!isAuthenticated()">
-            <span class="authentication-status__message">
-                You are not signed in.
-            </span>
         <a th:href="@{/user/login}">
             <div class="button button--primary">Sign in</div>
         </a>

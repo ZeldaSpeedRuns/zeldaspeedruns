@@ -1,0 +1,26 @@
+.dropdown {
+  position: relative;
+
+  &__button {
+    background-color: transparent;
+    border: none;
+    font-family: inherit;
+  }
+
+  &__menu {
+    visibility: hidden;
+    position: absolute;
+    box-shadow: 0 5px 15px rgba(black, 0.66);
+    top: calc(100% + 10px);
+  }
+
+  &:focus-within {
+    .dropdown__menu {
+      visibility: visible;
+    }
+  }
+
+  &__menu--left {
+    right: 10px;
+  }
+}

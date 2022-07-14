@@ -39,7 +39,9 @@
                         <div class="ucp-label" th:text="#{user.label.password}">
                             Password
                         </div>
-                        <div class="ucp-value">&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;</div>
+                        <div class="ucp-value">
+                            &#11044;&#11044;&#11044;&#11044;&#11044;&#11044;&#11044;&#11044;
+                        </div>
                     </div>
                 </div>
             </div>
@@ -56,7 +58,8 @@
                      th:text="#{ucp.account-details.linked-accounts.no-links}">
                     You have no linked accounts.
                 </div>
-                <div class="row margin-y-sm" th:each="link : ${accountLinks}" th:with="provider=${link.registrationId}">
+                <div class="row margin-y-sm" th:each="link : ${accountLinks}"
+                     th:with="provider=${link.registrationId}">
                     <img src="#" alt="Provider logo" class="ucp-provider-logo"
                          th:alt="#{${'user.third-party-provider.' + provider}}"
                          th:src="${'/images/providers/provider-'+ provider + '.svg'}">
