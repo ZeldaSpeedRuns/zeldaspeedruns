@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title th:text="${organization.name}">Organization</title>
+</head>
+<body>
+<main layout:fragment="content" class="container cp-container">
+    <nav th:replace="organizations/sidebar::nav(organization=${organization})">
+
+    </nav>
+
+    <section class="cp-content">
+        <h1 th:text="${organization.name}">Organization</h1>
+
+        <div class="cp-card">
+            <div class="cp-card__header">
+                <h2>Roles</h2>
+            </div>
+            <div class="cp-card__body">
+                <div style="display: grid; grid-template-columns: 3fr 3fr auto; gap: 10px; align-items: center">
+                    <div style="font-weight: bold">Name</div>
+                    <div style="font-weight: bold; grid-column: 2 / -1">Slug</div>
+                    <th:block th:each="role : ${organization.roles}">
+                        <div th:text="${role.name}">Name</div>
+                        <div th:text="${role.slug}">Slug</div>
+                        <div>
+                            <button type="button" class="button">Delete</button>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

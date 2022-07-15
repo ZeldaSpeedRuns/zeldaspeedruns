@@ -20,7 +20,6 @@ public class DiscordAccountLinkRequestConverter implements Converter<OAuth2User,
         Boolean emailVerified = getAttribute(user, EMAIL_VERIFIED_ATTRIBUTE);
         String discriminator = getAttribute(user, DISCRIMINATOR_ATTRIBUTE);
 
-
         var discordTag = String.format("%s#%s", username, discriminator);
         var linkRequest = new AccountLinkRequest(subject, discordTag, emailAddress, emailVerified);
 
@@ -28,6 +27,7 @@ public class DiscordAccountLinkRequestConverter implements Converter<OAuth2User,
         linkRequest.addUsernameCandidate(preferredUsername);
         linkRequest.addUsernameCandidate(preferredUsername + discriminator);
         linkRequest.addUsernameCandidate(preferredUsername + '-' + discriminator);
+
         return linkRequest;
     }
 

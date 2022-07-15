@@ -1,0 +1,101 @@
+@import "../abstracts";
+
+.cp-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.cp-content {
+  flex-grow: 1;
+}
+
+.cp-sidebar {
+  margin-right: 20px;
+  margin-top: 120px;
+  min-width: 200px;
+
+  &__category {
+    font-size: 0.8em;
+    font-weight: 600;
+    color: $text-color-dark;
+    text-transform: uppercase;
+    padding-left: 6px;
+  }
+
+  &__item {
+    margin: 3px 0;
+    padding: 3px 3px 3px 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, $background-color-darker, rgba(0, 0,0, 0));
+
+    /* This clever little hack is courtesy of:
+       https://keithjgrant.com/posts/2017/07/transitioning-gradients/ */
+    position: relative;
+    z-index: 1;
+
+    &::before {
+      position: absolute;
+      border-radius: 3px;
+      content: "";
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+
+      z-index: -1;
+      transition: opacity 200ms linear;
+      opacity: 0;
+      background: linear-gradient(to right, $background-color-light, rgba(0, 0,0, 0));
+    }
+
+    &:hover::before {
+      opacity: 1;
+    }
+  }
+}
+
+.cp-card {
+  border-radius: 10px;
+  background-color: $background-color-light;
+  padding: 20px;
+  margin-bottom: 40px;
+
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+  }
+
+  &__header {
+    padding-left: 20px;
+    margin-bottom: 20px;
+  }
+
+  &__body {
+    box-sizing: border-box;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: $background-color-dark;
+  }
+}
+
+.cp-label {
+  color: $text-color-dark;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.9em;
+}
+
+.ucp-provider-logo {
+  max-width: 32px;
+  max-height: 32px;
+}
+
+.ucp-provider-name {
+  padding: 0 20px;
+  text-transform: capitalize;
+  font-size: 1.1em;
+  font-weight: 600;
+  min-width: 150px;
+}
+
+.ucp-provider-username {
+}

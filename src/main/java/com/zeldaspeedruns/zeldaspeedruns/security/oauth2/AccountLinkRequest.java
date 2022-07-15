@@ -32,7 +32,7 @@ public class AccountLinkRequest {
     }
 
     public Set<String> getUsernameCandidates() {
-        return Set.copyOf(usernameCandidates);
+        return usernameCandidates;
     }
 
     public String getEmailAddress() {

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title th:text="${organization.name}">Organization</title>
+</head>
+<body>
+<main layout:fragment="content" class="container cp-container">
+    <nav th:replace="organizations/sidebar::nav(organization=${organization})">
+    </nav>
+
+    <section layout:fragment="body" class="cp-content">
+    </section>
+</main>
+</body>
+</html>

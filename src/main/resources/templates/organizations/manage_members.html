@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{organizations/organization_management_layout}">
+<head>
+    <title th:text="${organization.name}">Organization</title>
+</head>
+<body>
+<section class="cp-content" layout:fragment="body">
+    <h1 th:text="${organization.name}">Organization</h1>
+
+    <div class="cp-card">
+        <div class="cp-card__header">
+            <h2>Members</h2>
+        </div>
+        <div class="cp-card__body">
+            <div style="display: grid; grid-template-columns: 3fr 2fr 2fr ; gap: 10px; align-items: center">
+                <div style="font-weight: bold">Name</div>
+                <div style="font-weight: bold">Staff</div>
+                <div style="font-weight: bold">Owner</div>
+                <th:block th:each="member : ${members}">
+                    <div th:text="${member.user.username}">Name</div>
+                    <div th:text="${member.staff}">Is Staff</div>
+                    <div th:text="${member.owner}">Is Staff</div>
+                </th:block>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

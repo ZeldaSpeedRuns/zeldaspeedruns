@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -50,6 +51,7 @@ public class OAuth2AccountLinkServiceImpl implements OAuth2AccountLinkService {
         throw new OAuth2AuthenticationException("could not create user account");
     }
 
+    @Transactional
     protected OAuth2AccountLink linkAccount(AccountLinkRequest request, ClientRegistration registration, boolean verifiedOnly, boolean createUser) {
         ZsrUser user;
 
@@ -89,6 +91,7 @@ public class OAuth2AccountLinkServiceImpl implements OAuth2AccountLinkService {
         return linkRepository.save(link);
     }
 
+    @Transactional
     protected Optional<OAuth2AccountLink> loadAccountLink(AccountLinkRequest request, ClientRegistration registration) {
         var optional = linkRepository.findByRegistrationIdAndSubject(registration.getRegistrationId(), request.getSubject());
 

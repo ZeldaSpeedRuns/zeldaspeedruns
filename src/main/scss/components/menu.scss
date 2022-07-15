@@ -1,0 +1,21 @@
+@import "../abstracts";
+
+.menu-item {
+  display: grid;
+  align-items: center;
+  gap: 5px;
+  grid-template-columns: 25px auto;
+
+  &__icon {
+    width: 100%;
+    text-align: center;
+    color: $accent-color;
+  }
+
+  &__label {
+    color: $text-color;
+    &--noicon {
+      grid-column: 2 / -1;
+    }
+  }
+}

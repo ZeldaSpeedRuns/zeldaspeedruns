@@ -1,3 +1,5 @@
+drop table if exists organization_roles;
+drop table if exists organizations;
 drop table if exists oauth2_linked_accounts;
 drop table if exists user_action_tokens;
 drop table if exists users;
@@ -50,3 +52,45 @@ create table if not exists oauth2_linked_accounts
             on delete cascade
             on update cascade
 );
+
+
+create table if not exists organizations
+(
+    id   bigint primary key generated always as identity,
+    uuid uuid unique        not null default uuid_generate_v4(),
+    name varchar(128)       not null,
+    slug varchar(32) unique not null,
+    icon varchar(255)
+);
+
+create table if not exists organization_roles
+(
+    id              bigint primary key generated always as identity,
+    organization_id bigint             not null,
+    name            varchar(64)        not null,
+    slug            varchar(32) unique not null,
+    constraint uk_role_slug_organization unique (slug, organization_id),
+    constraint fk_role_organization
+        foreign key (organization_id) references organizations (id)
+            on delete cascade
+            on update cascade
+);
+
+
+create table if not exists organization_members
+(
+    id              bigint primary key generated always as identity,
+    organization_id bigint  not null,
+    user_id         bigint  not null,
+    is_owner        boolean not null default false,
+    is_staff        boolean not null default false,
+    constraint uk_organization_user unique (organization_id, user_id),
+    constraint fk_member_organization
+        foreign key (organization_id) references organizations (id)
+            on delete cascade
+            on update cascade,
+    constraint fk_member_user
+        foreign key (user_id) references users (id)
+            on delete cascade
+            on update cascade
+)

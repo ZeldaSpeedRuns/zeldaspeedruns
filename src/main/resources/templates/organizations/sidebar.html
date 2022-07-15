@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<nav class="cp-sidebar" th:fragment="nav(organization)"
+     aria-label="Organization Management Navigation"
+     th:with="baseUrl=@{/organizations/{slug}/manage(slug=${organization.slug})}">
+    <div class="cp-sidebar__category">General</div>
+    <a th:href="@{${baseUrl}}" class="cp-sidebar__item menu-item">
+        <span class="fa-solid fa-pen-to-square menu-item__icon"></span>
+        <span class="menu-item__label">Organization</span>
+    </a>
+    <a th:href="@{${baseUrl} + '/members'}" class="cp-sidebar__item menu-item">
+        <span class="fa-solid fa-users menu-item__icon"></span>
+        <span class="menu-item__label">Members</span>
+    </a>
+    <a th:href="@{${baseUrl} + '/roles'}" class="cp-sidebar__item menu-item">
+        <span class="fa-solid fa-list-check menu-item__icon"></span>
+        <span class="menu-item__label">Roles</span>
+    </a>
+</nav>
+</body>
+</html>

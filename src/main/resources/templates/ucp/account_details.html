@@ -7,39 +7,39 @@
     <title th:text="#{ucp.account-details.title}">Account Management</title>
 </head>
 <body>
-<main layout:fragment="content" class="container ucp-container">
-    <section class="ucp-content">
+<main layout:fragment="content" class="container cp-container">
+    <section class="cp-content">
         <h1 th:text="#{ucp.account-details.heading}">Account Details</h1>
-        <div class="ucp-card">
-            <div class="ucp-card__header row">
+        <div class="cp-card">
+            <div class="cp-card__header row">
                 <h2 class="grow" th:text="#{ucp.account-details.account.heading}">
                     Account Information
                 </h2>
                 <button class="button" th:text="#{label.modify}">Modify</button>
             </div>
-            <div class="ucp-card__body">
+            <div class="cp-card__body">
                 <div class="row margin-y-sm">
                     <div class="col grow">
-                        <div class="ucp-label" th:text="#{user.label.username}">
+                        <div class="cp-label" th:text="#{user.label.username}">
                             Username
                         </div>
-                        <div class="ucp-value" th:text="${user.username}">Spell</div>
+                        <div class="cp-value" th:text="${user.username}">Spell</div>
                     </div>
                 </div>
                 <div class="row margin-y-sm">
                     <div class="col grow">
-                        <div class="ucp-label" th:text="#{user.label.email-address}">
+                        <div class="cp-label" th:text="#{user.label.email-address}">
                             Email address
                         </div>
-                        <div class="ucp-value" th:text="${user.emailAddress}">***********@icloud.com</div>
+                        <div class="cp-value" th:text="${user.emailAddress}">***********@icloud.com</div>
                     </div>
                 </div>
                 <div class="row margin-y-sm">
                     <div class="col grow">
-                        <div class="ucp-label" th:text="#{user.label.password}">
+                        <div class="cp-label" th:text="#{user.label.password}">
                             Password
                         </div>
-                        <div class="ucp-value">
+                        <div class="cp-value">
                             &#11044;&#11044;&#11044;&#11044;&#11044;&#11044;&#11044;&#11044;
                         </div>
                     </div>
@@ -47,13 +47,13 @@
             </div>
         </div>
 
-        <div class="ucp-card">
-            <div class="ucp-card__header row">
+        <div class="cp-card">
+            <div class="cp-card__header row">
                 <h2 class="grow" th:text="#{ucp.account-details.linked-accounts.heading}">
                     Linked Accounts
                 </h2>
             </div>
-            <div class="ucp-card__body">
+            <div class="cp-card__body">
                 <div class="text-center" th:if="${accountLinks.isEmpty()}"
                      th:text="#{ucp.account-details.linked-accounts.no-links}">
                     You have no linked accounts.

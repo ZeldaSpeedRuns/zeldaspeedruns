@@ -13,10 +13,10 @@ public class ZsrUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NaturalId
     @Column(name = "uuid", nullable = false, unique = true, updatable = false)
     private final UUID uuid = UUID.randomUUID();
 
+    @NaturalId
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 

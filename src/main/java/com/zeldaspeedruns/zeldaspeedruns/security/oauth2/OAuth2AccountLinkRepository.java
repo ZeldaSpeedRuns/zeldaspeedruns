@@ -13,8 +13,7 @@ public interface OAuth2AccountLinkRepository extends CrudRepository<OAuth2Accoun
     @Query("""
             SELECT l FROM OAuth2AccountLink l
             JOIN FETCH l.user u
-            WHERE l.registrationId = :registrationId AND l.subject = :subject
-            """)
+            WHERE l.registrationId = :registrationId AND l.subject = :subject""")
     Optional<OAuth2AccountLink> findByRegistrationIdAndSubject(String registrationId, String subject);
 
     List<OAuth2AccountLink> findAllByUser(ZsrUser user);
