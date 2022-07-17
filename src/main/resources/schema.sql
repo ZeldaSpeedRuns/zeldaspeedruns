@@ -1,3 +1,4 @@
+drop table if exists organization_members;
 drop table if exists organization_roles;
 drop table if exists organizations;
 drop table if exists oauth2_linked_accounts;
@@ -20,15 +21,11 @@ create table if not exists users
 create unique index if not exists users_username_ci_idx on users (upper(username));
 create unique index if not exists users_email_ci_idx on users (upper(email_address));
 
-
-drop type if exists user_action;
-create type user_action as enum ('CONFIRM_EMAIL', 'RECOVER_ACCOUNT');
-
 create table if not exists user_action_tokens
 (
     id         bigint primary key generated always as identity,
     user_id    bigint                   not null,
-    action     user_action              not null,
+    action     varchar(32)              not null,
     token      varchar(40) unique       not null,
     expires_at timestamp with time zone not null,
     consumed   boolean                  not null default false,

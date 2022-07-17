@@ -3,7 +3,7 @@ package com.zeldaspeedruns.zeldaspeedruns.security.user.forms;
 import com.zeldaspeedruns.zeldaspeedruns.validation.constraints.MustMatch;
 import lombok.Data;
 
-import javax.validation.constraints.*;
+import jakarta.validation.constraints.*;
 
 @Data
 @MustMatch(

@@ -1,6 +1,6 @@
 package com.zeldaspeedruns.zeldaspeedruns.security.user;
 
-import javax.mail.MessagingException;
+import jakarta.mail.MessagingException;
 
 public interface UserMailService {
     void sendRegistrationConfirmationMail(ZsrUser user, UserActionToken token) throws MessagingException;

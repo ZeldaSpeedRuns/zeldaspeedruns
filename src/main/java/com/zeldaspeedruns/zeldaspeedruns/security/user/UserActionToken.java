@@ -1,21 +1,15 @@
 package com.zeldaspeedruns.zeldaspeedruns.security.user;
 
-import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 @Entity
 @Table(name = "user_action_tokens")
-@TypeDef(
-        name = "pgsql_enum",
-        typeClass = PostgreSQLEnumType.class
-)
 public class UserActionToken {
     public static final int TOKEN_VALUE_LENGTH = 40;
 
@@ -27,7 +21,6 @@ public class UserActionToken {
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private ZsrUser user;
 
-    @Type(type = "pgsql_enum")
     @Enumerated(EnumType.STRING)
     @Column(name = "action", nullable = false, updatable = false)
     private ActionType actionType;

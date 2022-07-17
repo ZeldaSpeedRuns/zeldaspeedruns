@@ -70,6 +70,21 @@ export SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_DISCORD_TWITCH_SECRET=twitch-s
 Currently, the application will not work without these. For development reasons we'll be looking for a more graceful 
 way to disable these features.
 
+### SMTP
+
+Much like above, ZeldaSpeedRuns requires the presence of an SMTP server. You can use your own personal GMail account for
+this but a much better idea is to use Docker and spin up a small SMTP server for development such as Mailhog. We are 
+planning to use GreenMail (which is an embedded development SMTP server) in the future for this goal.
+
+You can point the application to the correct place with the following environment variables:
+
+```shell
+export SPRING_MAIL_HOST=localhost
+export SPRING_MAIL_PORT=55025
+```
+
+For more information see the Spring Mail documentation.
+
 ## Development
 
 This application comes with Spring Boot DevTools enabled by default, allowing you the benefits they provide during

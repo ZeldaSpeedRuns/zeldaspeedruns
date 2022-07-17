@@ -2,7 +2,7 @@ package com.zeldaspeedruns.zeldaspeedruns.security.user;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import javax.mail.MessagingException;
+import jakarta.mail.MessagingException;
 
 public interface ZsrUserService {
     /**

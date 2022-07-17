@@ -1,14 +1,13 @@
 package com.zeldaspeedruns.zeldaspeedruns.security.oauth2;
 
-import groovyjarjarantlr4.v4.runtime.misc.OrderedHashSet;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 public class AccountLinkRequest {
     private final String subject;
     private final String username;
-    private final Set<String> usernameCandidates = new OrderedHashSet<>();
+    private final List<String> usernameCandidates = new ArrayList<>();
     private final String emailAddress;
     private final boolean emailVerified;
 
@@ -31,7 +30,7 @@ public class AccountLinkRequest {
         return username;
     }
 
-    public Set<String> getUsernameCandidates() {
+    public List<String> getUsernameCandidates() {
         return usernameCandidates;
     }
 

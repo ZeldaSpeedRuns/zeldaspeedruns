@@ -2,7 +2,7 @@ package com.zeldaspeedruns.zeldaspeedruns.organizations;
 
 import com.zeldaspeedruns.zeldaspeedruns.security.user.ZsrUser;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "organization_members", uniqueConstraints = {
