@@ -63,16 +63,17 @@ your client ID and secret. You can pass these to the applications as follows:
 ```shell
 export SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_DISCORD_CLIENT_ID=discordclientid
 export SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_DISCORD_CLIENT_SECRET=discord-secret
-export SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_DISCORD_TWITCH_ID=twitchlientid
-export SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_DISCORD_TWITCH_SECRET=twitch-secret
+export SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_TWITCH_ID=twitchlientid
+export SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_TWITCH_SECRET=twitch-secret
 ```
 
 Currently, the application will not work without these. For development reasons we'll be looking for a more graceful 
 way to disable these features.
 
-### SMTP
+### SMTP (optional)
 
-Much like above, ZeldaSpeedRuns requires the presence of an SMTP server. You can use your own personal GMail account for
+Much like above, ZeldaSpeedRuns makes use of SMTP to send emails in certain situations, for example when a user
+registers with their email address, or notifications for events. You can use your own personal GMail account for
 this but a much better idea is to use Docker and spin up a small SMTP server for development such as Mailhog. We are 
 planning to use GreenMail (which is an embedded development SMTP server) in the future for this goal.
 
@@ -83,7 +84,7 @@ export SPRING_MAIL_HOST=localhost
 export SPRING_MAIL_PORT=55025
 ```
 
-For more information see the Spring Mail documentation.
+The application will run fine without this, but you may encounter errors whenever email is involved.
 
 ## Development
 
