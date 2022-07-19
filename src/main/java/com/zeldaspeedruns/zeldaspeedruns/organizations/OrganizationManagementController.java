@@ -19,7 +19,7 @@ public class OrganizationManagementController {
 
     @GetMapping
     public String getDetailsPanel(@PathVariable String slug, Model model) throws Exception {
-        var organization = organizationService.getBySlug(slug);
+        var organization = organizationService.getOrganizationBySlug(slug);
         model.addAttribute("organization", organization);
         return "organizations/manage";
     }
@@ -28,7 +28,7 @@ public class OrganizationManagementController {
    public String getMemberPanel(@PathVariable String slug,
                                 @PageableDefault Pageable pageable,
                                 Model model) throws Exception {
-       var organization = organizationService.getBySlug(slug);
+       var organization = organizationService.getOrganizationBySlug(slug);
        var members = organizationService.findAllMembersByOrganization(organization, pageable);
 
        model.addAttribute("organization", organization);
@@ -38,7 +38,7 @@ public class OrganizationManagementController {
 
    @GetMapping("/roles")
    public String getRolesPanel(@PathVariable String slug, Model model) throws Exception {
-       var organization = organizationService.getBySlug(slug);
+       var organization = organizationService.getOrganizationBySlug(slug);
        model.addAttribute("organization", organization);
        return "organizations/manage_roles";
    }

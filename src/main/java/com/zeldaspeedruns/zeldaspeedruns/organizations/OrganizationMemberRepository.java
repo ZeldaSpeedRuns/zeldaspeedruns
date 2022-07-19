@@ -1,5 +1,6 @@
 package com.zeldaspeedruns.zeldaspeedruns.organizations;
 
+import com.zeldaspeedruns.zeldaspeedruns.security.user.ZsrUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -15,9 +16,12 @@ public interface OrganizationMemberRepository extends PagingAndSortingRepository
                     WHERE m.organization = :organization""",
             countQuery = """
                     SELECT count(m) FROM OrganizationMember m
-                    JOIN m.user 
+                    JOIN m.user
                     WHERE m.organization = :organization
                     """
     )
-    Page<OrganizationMember> findAllByOrganization(Pageable pageable, Organization organization);
+    Page<OrganizationMember> findAllByOrganization(Organization organization, Pageable pageable);
+
+    @Query("FROM OrganizationMember m JOIN FETCH m.organization WHERE m.user = :user")
+    Iterable<OrganizationMember> findAllByUser(ZsrUser user);
 }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{ucp/ucp_layout}">
+<head>
+    <title th:text="#{ucp.organizations.title}">Account Management</title>
+</head>
+<body>
+<section layout:fragment="body">
+    <h1 th:text="#{ucp.organizations.heading}">Organizations</h1>
+
+    <div class="cp-card">
+        <div class="cp-card__header row">
+            <h2 class="grow" th:text="#{ucp.organizations.memberships.heading}">
+                Memberships
+            </h2>
+        </div>
+        <div class="cp-card__body">
+            <div class="text-center" th:if="${memberships.isEmpty()}"
+                 th:text="#{ucp.organizations.no-memberships}">
+                You are not a member of any organizations.
+            </div>
+            <div class="row margin-y-sm" th:each="m : ${memberships}"
+                 style="display: grid; grid-template-columns: auto 1fr"
+                 th:with="o=${m.organization}">
+                <img th:if="${o.icon != null}" src="" alt=""
+                     th:src="${o.icon}">
+                <div th:if="${o.icon == null}"></div>
+
+                <a th:href="@{/organizations/{slug}(slug=${o.slug})}">
+                    <div class="grow" th:text="${o.name}"></div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

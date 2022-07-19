@@ -17,7 +17,7 @@ public class OrganizationController {
 
     @GetMapping("/{slug}")
     public String getOrganization(@PathVariable String slug, Model model) throws Exception {
-        var organization = organizationService.getBySlug(slug);
+        var organization = organizationService.getOrganizationBySlug(slug);
         model.addAttribute("organization", organization);
         return "organizations/detail";
     }
