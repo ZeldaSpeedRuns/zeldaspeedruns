@@ -3,6 +3,8 @@ package com.zeldaspeedruns.zeldaspeedruns.organizations;
 import org.hibernate.annotations.NaturalId;
 
 import jakarta.persistence.*;
+import org.springframework.data.jpa.repository.EntityGraph;
+
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -10,6 +12,10 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "organizations")
+@NamedEntityGraph(
+        name = "Organization.roles",
+        attributeNodes = @NamedAttributeNode("roles")
+)
 public class Organization {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +34,7 @@ public class Organization {
     @Column(name = "icon")
     private String icon;
 
-    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<OrganizationRole> roles = new HashSet<>();
 
     protected Organization() {

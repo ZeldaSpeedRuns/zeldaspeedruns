@@ -8,6 +8,16 @@ import jakarta.persistence.*;
 @Table(name = "organization_members", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"organization_id", "user_id"})
 })
+@NamedEntityGraphs({
+        @NamedEntityGraph(
+                name = "OrganizationMember.user",
+                attributeNodes = @NamedAttributeNode("user")
+        ),
+        @NamedEntityGraph(
+                name = "OrganizationMember.organization",
+                attributeNodes = @NamedAttributeNode("organization")
+        )
+})
 public class OrganizationMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

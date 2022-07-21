@@ -7,6 +7,10 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "oauth2_linked_accounts")
+@NamedEntityGraph(
+        name = "OAuth2AccountLink.user",
+        attributeNodes = @NamedAttributeNode("user")
+)
 public class OAuth2AccountLink {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
