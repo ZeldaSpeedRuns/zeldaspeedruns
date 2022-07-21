@@ -14,6 +14,6 @@ public interface OrganizationMemberRepository extends PagingAndSortingRepository
     @EntityGraph("OrganizationMember.user")
     Page<OrganizationMember> findAllByOrganization(Organization organization, Pageable pageable);
 
-    @EntityGraph("OrganizationMember.organization")
+    @EntityGraph("OrganizationMember.organizationAndRoles")
     Iterable<OrganizationMember> findAllByUser(ZsrUser user);
 }

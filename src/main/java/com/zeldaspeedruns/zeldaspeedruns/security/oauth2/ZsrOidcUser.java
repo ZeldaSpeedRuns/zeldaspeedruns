@@ -11,8 +11,8 @@ import java.util.Map;
 public class ZsrOidcUser extends ZsrUserDetails implements OidcUser {
     private final OidcUser oidcUser;
 
-    public ZsrOidcUser(ZsrUser user, OidcUser oidcUser) {
-        super(user);
+    public ZsrOidcUser(ZsrUserDetails userDetails, OidcUser oidcUser) {
+        super(userDetails.getUser(), userDetails.getOrganizationMemberships());
         this.oidcUser = oidcUser;
     }
 

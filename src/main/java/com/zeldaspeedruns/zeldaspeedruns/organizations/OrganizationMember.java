@@ -4,6 +4,9 @@ import com.zeldaspeedruns.zeldaspeedruns.security.user.ZsrUser;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "organization_members", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"organization_id", "user_id"})
@@ -16,6 +19,25 @@ import jakarta.persistence.*;
         @NamedEntityGraph(
                 name = "OrganizationMember.organization",
                 attributeNodes = @NamedAttributeNode("organization")
+        ),
+        @NamedEntityGraph(
+                name = "OrganizationMember.roles",
+                attributeNodes = @NamedAttributeNode("roles")
+        ),
+        @NamedEntityGraph(
+                name = "OrganizationMember.organizationAndRoles",
+                attributeNodes = {
+                        @NamedAttributeNode("organization"),
+                        @NamedAttributeNode("roles")
+                }
+        ),
+        @NamedEntityGraph(
+                name = "OrganizationMember.all",
+                attributeNodes = {
+                        @NamedAttributeNode("user"),
+                        @NamedAttributeNode("organization"),
+                        @NamedAttributeNode("roles")
+                }
         )
 })
 public class OrganizationMember {
@@ -30,6 +52,14 @@ public class OrganizationMember {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private ZsrUser user;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "organization_member_roles",
+            joinColumns = @JoinColumn(name = "member_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<OrganizationRole> roles = new HashSet<>();
 
     @Column(name = "is_owner")
     private boolean owner = false;
@@ -57,6 +87,10 @@ public class OrganizationMember {
         return user;
     }
 
+    public Set<OrganizationRole> getRoles() {
+        return roles;
+    }
+
     public boolean isOwner() {
         return owner;
     }
@@ -66,10 +100,19 @@ public class OrganizationMember {
     }
 
     public boolean isStaff() {
-        return staff;
+        return staff || owner;
     }
 
     public void setStaff(boolean staff) {
         this.staff = staff;
+    }
+
+    public boolean hasRole(OrganizationRole role) {
+        return roles.contains(role);
+    }
+
+    public boolean hasRole(String slug) {
+        return roles.stream()
+                .anyMatch(r -> slug.equals(r.getSlug()));
     }
 }
