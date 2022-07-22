@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
     private final OrganizationRepository organizationRepository;
@@ -45,10 +47,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public Organization getOrganizationBySlug(String slug) throws OrganizationNotFoundException {
-        return organizationRepository
-                .findBySlug(slug)
-                .orElseThrow(() -> new OrganizationNotFoundException("organization not found"));
+    public Optional<Organization> getOrganizationBySlug(String slug) {
+        return organizationRepository.findBySlug(slug);
     }
 
     @Override

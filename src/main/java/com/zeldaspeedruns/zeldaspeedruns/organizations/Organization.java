@@ -5,6 +5,7 @@ import org.hibernate.annotations.NaturalId;
 import jakarta.persistence.*;
 import org.springframework.data.jpa.repository.EntityGraph;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -25,7 +26,7 @@ import java.util.UUID;
                 }
         )
 })
-public class Organization {
+public class Organization implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

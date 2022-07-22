@@ -4,6 +4,7 @@ import com.zeldaspeedruns.zeldaspeedruns.security.user.ZsrUser;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -40,7 +41,7 @@ import java.util.Set;
                 }
         )
 })
-public class OrganizationMember {
+public class OrganizationMember implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

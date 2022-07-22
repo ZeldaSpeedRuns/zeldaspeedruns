@@ -24,11 +24,7 @@ public class OrganizationController {
 
     @ModelAttribute("organization")
     public Organization loadOrganization(@PathVariable(value = "slug", required = false) String slug)  {
-        try {
-            return organizationService.getOrganizationBySlug(slug);
-        } catch (OrganizationNotFoundException ignored) {
-            return null;
-        }
+        return organizationService.getOrganizationBySlug(slug).orElse(null);
     }
 
     @GetMapping("/{slug}")
@@ -37,13 +33,11 @@ public class OrganizationController {
     }
 
     @GetMapping("/create")
-    @PreAuthorize("hasRole('ADMIN')")
     public String getOrganizationCreationForm(@ModelAttribute("form") CreateOrganizationForm form) {
         return "organizations/create_form";
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN')")
     public String postOrganizationCreationForm(@AuthenticationPrincipal ZsrUserDetails principal,
                                                @ModelAttribute("form") @Valid CreateOrganizationForm form,
                                                BindingResult bindingResult) {

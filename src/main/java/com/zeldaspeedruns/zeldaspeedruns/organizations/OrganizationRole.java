@@ -3,13 +3,15 @@ package com.zeldaspeedruns.zeldaspeedruns.organizations;
 import org.hibernate.annotations.NaturalId;
 
 import jakarta.persistence.*;
+
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "organization_roles", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"organization_id", "slug"})
 })
-public class OrganizationRole {
+public class OrganizationRole implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
