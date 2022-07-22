@@ -99,3 +99,22 @@
 
 .ucp-provider-username {
 }
+
+.role-list {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  margin: 3px 0;
+
+
+  &--item {
+    border-radius: 30000px;
+    padding-right: 10px;
+    padding-left: 10px;
+    background-color: $background-color-lighter;
+    color: $text-color;
+    font-size: 0.85em;
+  }
+}

@@ -1,10 +1,16 @@
 package com.zeldaspeedruns.zeldaspeedruns.organizations;
 
+import com.zeldaspeedruns.zeldaspeedruns.organizations.forms.CreateOrganizationForm;
 import com.zeldaspeedruns.zeldaspeedruns.security.user.ExpiredTokenException;
+import com.zeldaspeedruns.zeldaspeedruns.security.userdetails.ZsrUserDetails;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -16,11 +22,37 @@ public class OrganizationController {
         this.organizationService = organizationService;
     }
 
+    @ModelAttribute("organization")
+    public Organization loadOrganization(@PathVariable(value = "slug", required = false) String slug)  {
+        try {
+            return organizationService.getOrganizationBySlug(slug);
+        } catch (OrganizationNotFoundException ignored) {
+            return null;
+        }
+    }
+
     @GetMapping("/{slug}")
-    public String getOrganization(@PathVariable String slug, Model model) throws Exception {
-        var organization = organizationService.getOrganizationBySlug(slug);
-        model.addAttribute("organization", organization);
+    public String getOrganization(Organization organization) {
         return "organizations/detail";
+    }
+
+    @GetMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String getOrganizationCreationForm(@ModelAttribute("form") CreateOrganizationForm form) {
+        return "organizations/create_form";
+    }
+
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String postOrganizationCreationForm(@AuthenticationPrincipal ZsrUserDetails principal,
+                                               @ModelAttribute("form") @Valid CreateOrganizationForm form,
+                                               BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "organizations/create_form";
+        }
+
+        var organization = organizationService.createOrganization(form.getName(), form.getSlug());
+        return "redirect:/organizations/" + organization.getSlug();
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)

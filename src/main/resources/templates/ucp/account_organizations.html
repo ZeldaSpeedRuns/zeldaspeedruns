@@ -28,9 +28,15 @@
                      th:src="${o.icon}">
                 <div th:if="${o.icon == null}"></div>
 
-                <a th:href="@{/organizations/{slug}(slug=${o.slug})}">
-                    <div class="grow" th:text="${o.name}"></div>
-                </a>
+                <div class="grow">
+                    <a th:href="@{/organizations/{slug}(slug=${o.slug})}">
+                        <div th:text="${o.name}"></div>
+                    </a>
+
+                    <div th:if="${!m.roles.isEmpty()}" class="role-list">
+                        <span class="role-list--item" th:each="r : ${m.roles}" th:text="${r.name}"></span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

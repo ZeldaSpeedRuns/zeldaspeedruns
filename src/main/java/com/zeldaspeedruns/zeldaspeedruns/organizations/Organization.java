@@ -12,10 +12,19 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "organizations")
-@NamedEntityGraph(
-        name = "Organization.roles",
-        attributeNodes = @NamedAttributeNode("roles")
-)
+@NamedEntityGraphs({
+        @NamedEntityGraph(
+                name = "Organization.roles",
+                attributeNodes = @NamedAttributeNode("roles")
+        ),
+        @NamedEntityGraph(
+                name = "Organization.members",
+                attributeNodes = @NamedAttributeNode(value = "members"),
+                subgraphs = {
+
+                }
+        )
+})
 public class Organization {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +45,9 @@ public class Organization {
 
     @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<OrganizationRole> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<OrganizationMember> members = new HashSet<>();
 
     protected Organization() {
     }

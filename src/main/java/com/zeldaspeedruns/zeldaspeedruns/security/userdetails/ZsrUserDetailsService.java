@@ -25,12 +25,11 @@ public class ZsrUserDetailsService implements UserDetailsService {
 
     /**
      * Loads and constructs a user details principal from a user domain model.
+     *
      * @param zsrUser The user domain model.
      * @return Instantiated authentication principal.
      */
     public ZsrUserDetails load(ZsrUser zsrUser) {
-        // Fetch all of our user's organization memberships and roles.
-        var memberships = Streamable.of(memberRepository.findAllByUser(zsrUser)).toSet();
-        return new ZsrUserDetails(zsrUser, memberships);
+        return new ZsrUserDetails(zsrUser);
     }
 }

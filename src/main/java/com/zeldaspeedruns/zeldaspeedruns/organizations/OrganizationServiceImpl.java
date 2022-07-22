@@ -3,7 +3,6 @@ package com.zeldaspeedruns.zeldaspeedruns.organizations;
 import com.zeldaspeedruns.zeldaspeedruns.security.user.ZsrUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,7 +18,30 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public Organization createOrganization(String name, String slug) {
-        return null;
+        var organization = new Organization(name, slug);
+
+        // Create default roles for the organization.
+        var roles = organization.getRoles();
+        roles.add(new OrganizationRole(organization, "Tracker", "tracker"));
+        roles.add(new OrganizationRole(organization, "Commentator", "commentator"));
+        roles.add(new OrganizationRole(organization, "Restreamer", "restreamer"));
+
+        return organizationRepository.save(organization);
+    }
+
+    @Override
+    public OrganizationMember addOrganizationMember(Organization organization, ZsrUser user) {
+        if (memberRepository.existsByOrganizationAndUser(organization, user)) {
+            throw new RuntimeException("already a member of organization");
+        }
+
+        var membership = new OrganizationMember(organization, user);
+        return memberRepository.save(membership);
+    }
+
+    @Override
+    public void deleteOrganization(Organization organization) {
+        organizationRepository.delete(organization);
     }
 
     @Override

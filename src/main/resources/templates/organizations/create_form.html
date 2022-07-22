@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title th:text="#{organizations.create.title}">Create Organization</title>
+</head>
+<body>
+<main layout:fragment="content" class="container">
+    <h1 th:text="#{organizations.create.heading}">Create Organization</h1>
+
+    <form method="post" action="#" th:action="@{/organizations/create}" th:object="${form}">
+        <div class="form-group">
+            <div class="form-field">
+                <label for="name" class="form-field__label"
+                       th:text="#{organizations.label.name}">
+                    Name
+                </label>
+
+                <input type="text" id="name" class="input" required autofocus
+                       placeholder="Name" th:placeholder="#{organizations.placeholder.name}"
+                       th:field="*{name}" th:errorclass="input--error"/>
+
+                <ul th:if="${#fields.hasErrors('name')}" class="form-field__error-list">
+                    <li th:errors="*{name}">Name error</li>
+                </ul>
+            </div>
+
+            <div class="form-field">
+                <label for="slug" class="form-field__label"
+                       th:text="#{organizations.label.slug}">
+                    Slug
+                </label>
+
+                <input type="text" id="slug" class="input" required
+                       placeholder="name-slug" th:placeholder="#{organizations.placeholder.slug}"
+                       th:field="*{slug}" th:errorclass="input--error"/>
+
+                <ul th:if="${#fields.hasErrors('slug')}" class="form-field__error-list">
+                    <li th:errors="*{slug}">Slug error</li>
+                </ul>
+            </div>
+
+            <button type="submit" class="button"
+                    th:text="#{organizations.create.submit}">
+                Create Organization
+            </button>
+        </div>
+    </form>
+</main>
+</body>
+</html>

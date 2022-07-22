@@ -9,7 +9,7 @@ public class ZsrOAuth2User extends ZsrUserDetails implements OAuth2User {
     private final OAuth2User oAuth2User;
 
     public ZsrOAuth2User(ZsrUserDetails userDetails, OAuth2User oAuth2User) {
-        super(userDetails.getUser(), userDetails.getOrganizationMemberships());
+        super(userDetails.getUser());
         this.oAuth2User = oAuth2User;
     }
 

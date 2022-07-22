@@ -12,7 +12,7 @@ public class ZsrOidcUser extends ZsrUserDetails implements OidcUser {
     private final OidcUser oidcUser;
 
     public ZsrOidcUser(ZsrUserDetails userDetails, OidcUser oidcUser) {
-        super(userDetails.getUser(), userDetails.getOrganizationMemberships());
+        super(userDetails.getUser());
         this.oidcUser = oidcUser;
     }
 
