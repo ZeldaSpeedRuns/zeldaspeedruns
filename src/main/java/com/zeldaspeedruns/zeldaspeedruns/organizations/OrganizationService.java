@@ -1,9 +1,9 @@
 package com.zeldaspeedruns.zeldaspeedruns.organizations;
 
+import com.zeldaspeedruns.zeldaspeedruns.organizations.projections.OrganizationWithMemberCount;
 import com.zeldaspeedruns.zeldaspeedruns.security.user.ZsrUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.Optional;
 
@@ -16,9 +16,11 @@ public interface OrganizationService {
 
     Optional<Organization> getOrganizationBySlug(String slug);
 
-    Page<Organization> findAllOrganizations(Pageable pageable);
+    Page<OrganizationWithMemberCount> findAllOrganizations(Pageable pageable);
 
     Page<OrganizationMember> findAllMembersByOrganization(Organization organization, Pageable pageable);
 
     Iterable<OrganizationMember> findAllMembershipsByUser(ZsrUser user);
+
+    Optional<OrganizationMember> loadMembership(ZsrUser user, Organization organization);
 }

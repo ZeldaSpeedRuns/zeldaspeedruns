@@ -5,6 +5,8 @@ import com.zeldaspeedruns.zeldaspeedruns.security.user.ExpiredTokenException;
 import com.zeldaspeedruns.zeldaspeedruns.security.userdetails.ZsrUserDetails;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,7 +26,19 @@ public class OrganizationController {
 
     @ModelAttribute("organization")
     public Organization loadOrganization(@PathVariable(value = "slug", required = false) String slug)  {
-        return organizationService.getOrganizationBySlug(slug).orElse(null);
+        if (slug != null && !slug.isEmpty()) {
+            return organizationService.getOrganizationBySlug(slug).orElse(null);
+        } else {
+            return null;
+        }
+    }
+
+    @GetMapping
+    public String getOrganizations(@PageableDefault(sort = "name") Pageable pageable,
+                                   Model model) {
+        var organizations = this.organizationService.findAllOrganizations(pageable);
+        model.addAttribute("organizations", organizations);
+        return "organizations/list";
     }
 
     @GetMapping("/{slug}")

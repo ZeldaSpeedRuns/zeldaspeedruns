@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title th:text="#{organizations.index.title}">Organizations</title>
+</head>
+<body>
+<main layout:fragment="content" class="container">
+    <h1 th:text="#{organizations.index.heading}">Organizations</h1>
+    <div th:each="o : ${organizations}">
+        <h2 th:text="${o.getName()}">Organization Name</h2>
+        <div>
+            <span class="fa-solid fa-users"></span>
+            <span th:text="${o.getMemberCount()}">0</span> Members
+        </div>
+    </div>
+</main>
+</body>
+</html>

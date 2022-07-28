@@ -1,5 +1,6 @@
 package com.zeldaspeedruns.zeldaspeedruns.organizations;
 
+import com.zeldaspeedruns.zeldaspeedruns.organizations.projections.OrganizationWithMemberCount;
 import com.zeldaspeedruns.zeldaspeedruns.security.user.ZsrUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,8 +53,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public Page<Organization> findAllOrganizations(Pageable pageable) {
-        return organizationRepository.findAll(pageable);
+    public Page<OrganizationWithMemberCount> findAllOrganizations(Pageable pageable) {
+        return organizationRepository.findAllWithMemberCount(pageable);
     }
 
     @Override
@@ -64,5 +65,10 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public Iterable<OrganizationMember> findAllMembershipsByUser(ZsrUser user) {
         return memberRepository.findAllByUser(user);
+    }
+
+    @Override
+    public Optional<OrganizationMember> loadMembership(ZsrUser user, Organization organization) {
+        return memberRepository.findByUserAndOrganization(user, organization);
     }
 }
