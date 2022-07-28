@@ -1,6 +1,7 @@
 package com.zeldaspeedruns.zeldaspeedruns.security.user;
 
 import com.zeldaspeedruns.zeldaspeedruns.security.SecureTokenUtils;
+import jakarta.mail.MessagingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -8,7 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.mail.MessagingException;
 import java.time.Instant;
 
 /**

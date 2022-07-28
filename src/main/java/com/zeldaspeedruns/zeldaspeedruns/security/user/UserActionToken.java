@@ -38,14 +38,16 @@ public class UserActionToken {
     @Column(name = "consumed", nullable = false)
     private Boolean consumed = false;
 
-    /** JPA Constructor */
+    /**
+     * JPA Constructor
+     */
     protected UserActionToken() {
     }
 
     /**
      * Constructs a UserActionToken entity for a {@link ZsrUser}.
      *
-     * @param user The ZsrUser to create the token for.
+     * @param user       The ZsrUser to create the token for.
      * @param actionType The type of action the token will be allowed to take.
      * @param tokenValue The string value of the token.
      */

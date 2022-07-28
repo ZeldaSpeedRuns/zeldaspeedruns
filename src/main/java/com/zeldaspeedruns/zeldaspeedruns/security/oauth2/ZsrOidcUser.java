@@ -1,6 +1,5 @@
 package com.zeldaspeedruns.zeldaspeedruns.security.oauth2;
 
-import com.zeldaspeedruns.zeldaspeedruns.security.user.ZsrUser;
 import com.zeldaspeedruns.zeldaspeedruns.security.userdetails.ZsrUserDetails;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;

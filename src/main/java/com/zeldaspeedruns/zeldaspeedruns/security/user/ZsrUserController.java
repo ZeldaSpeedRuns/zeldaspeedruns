@@ -3,13 +3,12 @@ package com.zeldaspeedruns.zeldaspeedruns.security.user;
 import com.zeldaspeedruns.zeldaspeedruns.security.user.forms.ChangePasswordForm;
 import com.zeldaspeedruns.zeldaspeedruns.security.user.forms.RecoverAccountForm;
 import com.zeldaspeedruns.zeldaspeedruns.security.user.forms.RegisterUserForm;
+import jakarta.mail.MessagingException;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.mail.MessagingException;
-import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/user")

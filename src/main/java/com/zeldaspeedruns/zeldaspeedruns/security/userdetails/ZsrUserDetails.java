@@ -1,13 +1,14 @@
 package com.zeldaspeedruns.zeldaspeedruns.security.userdetails;
 
-import com.zeldaspeedruns.zeldaspeedruns.organizations.Organization;
-import com.zeldaspeedruns.zeldaspeedruns.organizations.OrganizationMember;
 import com.zeldaspeedruns.zeldaspeedruns.security.user.ZsrUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Implements the Spring UserDetails authentication principal.

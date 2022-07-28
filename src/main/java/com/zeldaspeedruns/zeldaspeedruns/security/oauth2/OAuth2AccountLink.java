@@ -1,8 +1,8 @@
 package com.zeldaspeedruns.zeldaspeedruns.security.oauth2;
 
 import com.zeldaspeedruns.zeldaspeedruns.security.user.ZsrUser;
-
 import jakarta.persistence.*;
+
 import java.util.Objects;
 
 @Entity

@@ -1,5 +1,7 @@
 package com.zeldaspeedruns.zeldaspeedruns.security.user;
 
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -10,8 +12,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.ISpringTemplateEngine;
 
-import jakarta.mail.MessagingException;
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.Locale;
 
 @Service
@@ -20,22 +20,22 @@ public class UserMailServiceImpl implements UserMailService {
     private final ISpringTemplateEngine templateEngine;
     private final MessageSource messageSource;
 
-    private Locale resolveLocale() {
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        if (requestAttributes instanceof ServletRequestAttributes) {
-            HttpServletRequest request = ((ServletRequestAttributes)requestAttributes).getRequest();
-            return request.getLocale();
-        } else {
-            return Locale.getDefault();
-        }
-    }
-
     public UserMailServiceImpl(JavaMailSender mailSender,
                                ISpringTemplateEngine templateEngine,
                                MessageSource messageSource) {
         this.mailSender = mailSender;
         this.templateEngine = templateEngine;
         this.messageSource = messageSource;
+    }
+
+    private Locale resolveLocale() {
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        if (requestAttributes instanceof ServletRequestAttributes) {
+            HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+            return request.getLocale();
+        } else {
+            return Locale.getDefault();
+        }
     }
 
     protected void sendMail(String to, String subject, String body) throws MessagingException {

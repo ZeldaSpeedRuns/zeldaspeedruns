@@ -1,9 +1,8 @@
 package com.zeldaspeedruns.zeldaspeedruns.security.user.forms;
 
 import com.zeldaspeedruns.zeldaspeedruns.validation.constraints.MustMatch;
-import lombok.Data;
-
 import jakarta.validation.constraints.*;
+import lombok.Data;
 
 @Data
 @MustMatch(

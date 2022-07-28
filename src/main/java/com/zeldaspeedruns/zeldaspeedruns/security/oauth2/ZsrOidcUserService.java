@@ -1,7 +1,6 @@
 package com.zeldaspeedruns.zeldaspeedruns.security.oauth2;
 
 import com.zeldaspeedruns.zeldaspeedruns.security.userdetails.ZsrUserDetails;
-import com.zeldaspeedruns.zeldaspeedruns.security.userdetails.ZsrUserDetailsService;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;

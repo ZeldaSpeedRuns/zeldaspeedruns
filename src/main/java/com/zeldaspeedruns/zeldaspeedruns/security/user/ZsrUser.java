@@ -1,8 +1,8 @@
 package com.zeldaspeedruns.zeldaspeedruns.security.user;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.NaturalId;
 
-import jakarta.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -12,13 +12,11 @@ import java.util.UUID;
 @Entity
 @Table(name = "users")
 public class ZsrUser {
+    @Column(name = "uuid", nullable = false, unique = true, updatable = false)
+    private final UUID uuid = UUID.randomUUID();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "uuid", nullable = false, unique = true, updatable = false)
-    private final UUID uuid = UUID.randomUUID();
-
     @NaturalId
     @Column(name = "username", nullable = false, unique = true)
     private String username;
@@ -35,16 +33,18 @@ public class ZsrUser {
     @Column(name = "is_enabled", nullable = false)
     private Boolean enabled = true;
 
-    /** JPA constructor */
+    /**
+     * JPA constructor
+     */
     protected ZsrUser() {
     }
 
     /**
      * Constructs a new user instance.
      *
-     * @param username The username for the user.
+     * @param username     The username for the user.
      * @param emailAddress The email address for the user.
-     * @param password The encrypted password for the user.
+     * @param password     The encrypted password for the user.
      */
     public ZsrUser(String username, String emailAddress, String password) {
         this.username = Objects.requireNonNull(username, "username must not be null");
