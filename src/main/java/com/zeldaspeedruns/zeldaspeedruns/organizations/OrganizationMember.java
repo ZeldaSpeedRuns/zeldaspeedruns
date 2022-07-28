@@ -1,7 +1,6 @@
 package com.zeldaspeedruns.zeldaspeedruns.organizations;
 
 import com.zeldaspeedruns.zeldaspeedruns.security.user.ZsrUser;
-
 import jakarta.persistence.*;
 
 import java.io.Serializable;

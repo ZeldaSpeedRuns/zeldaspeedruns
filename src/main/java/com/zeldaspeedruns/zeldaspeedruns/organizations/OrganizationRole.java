@@ -1,8 +1,7 @@
 package com.zeldaspeedruns.zeldaspeedruns.organizations;
 
-import org.hibernate.annotations.NaturalId;
-
 import jakarta.persistence.*;
+import org.hibernate.annotations.NaturalId;
 
 import java.io.Serializable;
 import java.util.Objects;

@@ -1,9 +1,7 @@
 package com.zeldaspeedruns.zeldaspeedruns.organizations;
 
-import org.hibernate.annotations.NaturalId;
-
 import jakarta.persistence.*;
-import org.springframework.data.jpa.repository.EntityGraph;
+import org.hibernate.annotations.NaturalId;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -27,13 +25,11 @@ import java.util.UUID;
         )
 })
 public class Organization implements Serializable {
+    @Column(name = "uuid", nullable = false, updatable = false, unique = true)
+    private final UUID uuid = UUID.randomUUID();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "uuid", nullable = false, updatable = false, unique = true)
-    private final UUID uuid = UUID.randomUUID();
-
     @Column(name = "name", nullable = false)
     private String name;
 

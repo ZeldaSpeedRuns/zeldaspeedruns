@@ -20,26 +20,20 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ZsrUserServiceImplTests {
-    @Mock
-    private ZsrUserRepository userRepository;
-
-    @Mock
-    private UserActionTokenRepository tokenRepository;
-
-    @Mock
-    private PasswordEncoder passwordEncoder;
-
-    @Mock
-    private UserMailService mailService;
-
-    @InjectMocks
-    private ZsrUserServiceImpl userService;
-
     private final String username = "spell";
     private final String emailAddress = "spell@example.com";
     private final String password = "password";
     private final String encodedPassword = "encoded";
-
+    @Mock
+    private ZsrUserRepository userRepository;
+    @Mock
+    private UserActionTokenRepository tokenRepository;
+    @Mock
+    private PasswordEncoder passwordEncoder;
+    @Mock
+    private UserMailService mailService;
+    @InjectMocks
+    private ZsrUserServiceImpl userService;
     private ZsrUser user;
 
     private UserActionToken createToken(ActionType actionType) {

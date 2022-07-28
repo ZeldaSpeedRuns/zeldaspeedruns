@@ -8,16 +8,15 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ZsrUserDetailsTests {
-    private ZsrUser user;
-    private ZsrUserDetails userDetails;
-
     private final static String username = "spell";
     private final static String email = "spell@example.com";
     private final static String password = "password";
+    private ZsrUser user;
+    private ZsrUserDetails userDetails;
 
     @BeforeEach
     public void beforeEach() {
-        user =  new ZsrUser(username, email, password);
+        user = new ZsrUser(username, email, password);
         userDetails = new ZsrUserDetails(user);
     }
 

@@ -1,9 +1,9 @@
 package com.zeldaspeedruns.zeldaspeedruns.validation;
 
 import com.zeldaspeedruns.zeldaspeedruns.validation.constraints.Slug;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+
 import java.util.regex.Pattern;
 
 public class SlugValidator implements ConstraintValidator<Slug, String> {

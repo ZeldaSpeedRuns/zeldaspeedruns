@@ -10,13 +10,15 @@
 <body>
 <main layout:fragment="content" class="container">
     <h1 th:text="#{organizations.index.heading}">Organizations</h1>
-    <div th:each="o : ${organizations}">
-        <h2 th:text="${o.getName()}">Organization Name</h2>
+    <a th:each="o : ${organizations}" th:href="@{/organizations/{slug}(slug=${o.slug})}">
         <div>
-            <span class="fa-solid fa-users"></span>
-            <span th:text="${o.getMemberCount()}">0</span> Members
+            <h2 th:text="${o.name}">Organization Name</h2>
+            <div>
+                <span class="fa-solid fa-users"></span>
+                <span>0</span> Members
+            </div>
         </div>
-    </div>
+    </a>
 </main>
 </body>
 </html>

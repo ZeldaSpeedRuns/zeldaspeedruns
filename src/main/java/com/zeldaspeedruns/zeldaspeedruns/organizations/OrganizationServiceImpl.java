@@ -1,6 +1,5 @@
 package com.zeldaspeedruns.zeldaspeedruns.organizations;
 
-import com.zeldaspeedruns.zeldaspeedruns.organizations.projections.OrganizationWithMemberCount;
 import com.zeldaspeedruns.zeldaspeedruns.security.user.ZsrUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +20,10 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public Organization createOrganization(String name, String slug) {
+        if (organizationRepository.existsBySlug(slug)) {
+            throw new OrganizationSlugInUseException("organization with that slug already exists");
+        }
+
         var organization = new Organization(name, slug);
 
         // Create default roles for the organization.
@@ -35,7 +38,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public OrganizationMember addOrganizationMember(Organization organization, ZsrUser user) {
         if (memberRepository.existsByOrganizationAndUser(organization, user)) {
-            throw new RuntimeException("already a member of organization");
+            throw new MembershipExistsException("already a member of organization");
         }
 
         var membership = new OrganizationMember(organization, user);
@@ -48,13 +51,13 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public Optional<Organization> getOrganizationBySlug(String slug) {
+    public Optional<Organization> findOrganizationBySlug(String slug) {
         return organizationRepository.findBySlug(slug);
     }
 
     @Override
-    public Page<OrganizationWithMemberCount> findAllOrganizations(Pageable pageable) {
-        return organizationRepository.findAllWithMemberCount(pageable);
+    public Page<Organization> findAllOrganizations(Pageable pageable) {
+        return organizationRepository.findAll(pageable);
     }
 
     @Override
@@ -68,7 +71,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public Optional<OrganizationMember> loadMembership(ZsrUser user, Organization organization) {
+    public Optional<OrganizationMember> findMembership(Organization organization, ZsrUser user) {
         return memberRepository.findByUserAndOrganization(user, organization);
     }
 }

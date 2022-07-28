@@ -1,8 +1,6 @@
 package com.zeldaspeedruns.zeldaspeedruns.security;
 
 import com.zeldaspeedruns.zeldaspeedruns.organizations.OrganizationPermissionEvaluator;
-import com.zeldaspeedruns.zeldaspeedruns.organizations.OrganizationService;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;

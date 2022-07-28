@@ -34,7 +34,7 @@ public class OrganizationPermissionEvaluator implements PermissionEvaluator {
         }
 
         var user = userDetails.getUser();
-        var membershipOptional = organizationService.loadMembership(user, organization);
+        var membershipOptional = organizationService.findMembership(organization, user);
 
         if (membershipOptional.isPresent()) {
             var membership = membershipOptional.get();
@@ -46,7 +46,6 @@ public class OrganizationPermissionEvaluator implements PermissionEvaluator {
 
     @Override
     public boolean hasPermission(Authentication authentication, Serializable targetId, String targetType, Object permission) {
-        // not used
-        return false;
+        throw new RuntimeException("not implemented");
     }
 }

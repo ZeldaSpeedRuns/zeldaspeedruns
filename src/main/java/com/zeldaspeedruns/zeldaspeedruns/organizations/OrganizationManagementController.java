@@ -22,7 +22,7 @@ public class OrganizationManagementController {
 
     @ModelAttribute("organization")
     public Organization loadOrganization(@PathVariable String slug) {
-        return organizationService.getOrganizationBySlug(slug).orElse(null);
+        return organizationService.findOrganizationBySlug(slug).orElse(null);
     }
 
     @GetMapping
@@ -30,18 +30,18 @@ public class OrganizationManagementController {
         return "organizations/manage";
     }
 
-   @GetMapping("/members")
-   public String getMemberPanel(Organization organization,
-                                @PageableDefault Pageable pageable,
-                                Model model) {
-       var members = organizationService.findAllMembersByOrganization(organization, pageable);
-       model.addAttribute("members", members);
+    @GetMapping("/members")
+    public String getMemberPanel(Organization organization,
+                                 @PageableDefault Pageable pageable,
+                                 Model model) {
+        var members = organizationService.findAllMembersByOrganization(organization, pageable);
+        model.addAttribute("members", members);
 
-       return "organizations/manage_members";
-   }
+        return "organizations/manage_members";
+    }
 
-   @GetMapping("/roles")
-   public String getRolesPanel(Organization organization) {
-       return "organizations/manage_roles";
-   }
+    @GetMapping("/roles")
+    public String getRolesPanel(Organization organization) {
+        return "organizations/manage_roles";
+    }
 }
