@@ -9,9 +9,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
 
+/**
+ * Implements the Spring UserDetails authentication principal.
+ */
 public class ZsrUserDetails implements UserDetails {
     private final ZsrUser user;
 
+    /**
+     * Constructs a new ZsrUserDetails instance from a ZsrUser instance.
+     *
+     * @param user Instance of ZsrUser
+     */
     public ZsrUserDetails(ZsrUser user) {
         this.user = Objects.requireNonNull(user, "user must not be null");
     }
@@ -58,6 +66,11 @@ public class ZsrUserDetails implements UserDetails {
         return user.isEnabled();
     }
 
+    /**
+     * Returns the ZsrUser this authentication principal belongs to.
+     *
+     * @return Instance of ZsrUser
+     */
     public ZsrUser getUser() {
         return user;
     }
