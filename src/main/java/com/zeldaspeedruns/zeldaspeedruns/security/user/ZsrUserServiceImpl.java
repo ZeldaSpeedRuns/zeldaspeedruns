@@ -11,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.mail.MessagingException;
 import java.time.Instant;
 
+/**
+ * Implements the ZsrUserService interface using Spring Data repositories.
+ */
 @Service
 public class ZsrUserServiceImpl implements ZsrUserService {
     private final static Logger logger = LoggerFactory.getLogger(ZsrUserServiceImpl.class);
@@ -30,7 +33,16 @@ public class ZsrUserServiceImpl implements ZsrUserService {
         this.mailService = mailService;
     }
 
-    protected UserActionToken findValidToken(String tokenValue, ActionType actionType) throws InvalidTokenException, ExpiredTokenException {
+    /**
+     * Loads a token from the database.
+     *
+     * @param tokenValue The alphanumeric string value of the token.
+     * @param actionType The type of the token.
+     * @return Instantiated UserActionToken entity.
+     * @throws InvalidTokenException Thrown if the token is invalid.
+     * @throws ExpiredTokenException Thrown if the token has expired.
+     */
+    protected UserActionToken loadToken(String tokenValue, ActionType actionType) throws InvalidTokenException, ExpiredTokenException {
         var tokenOptional = tokenRepository.findByTokenValue(tokenValue);
 
         if (tokenOptional.isPresent()) {
@@ -92,17 +104,23 @@ public class ZsrUserServiceImpl implements ZsrUserService {
     public ZsrUser registerUser(String username, String emailAddress, String password) throws UsernameInUseException, EmailInUseException, MessagingException {
         ZsrUser user = createUser(username, emailAddress, password);
         user.setEnabled(false);
-        UserActionToken token = createRegistrationToken(user);
-        mailService.sendRegistrationConfirmationMail(user, token);
+
+        try {
+            UserActionToken token = createRegistrationToken(user);
+            mailService.sendRegistrationConfirmationMail(user, token);
+        } catch (InvalidTokenException e) {
+            throw new RuntimeException(e);
+        }
+
         return user;
     }
 
     @Override
     @Transactional
     public void confirmRegistration(String tokenValue) throws InvalidTokenException, ExpiredTokenException {
-        var token = findValidToken(tokenValue, ActionType.CONFIRM_EMAIL);
+        var token = loadToken(tokenValue, ActionType.CONFIRM_EMAIL);
         token.getUser().setEnabled(true);
-        token.setConsumed(true);
+        token.consume();
         logger.debug("Activated user {} with token {}", token.getUser().getUsername(), tokenValue);
     }
 
@@ -112,38 +130,35 @@ public class ZsrUserServiceImpl implements ZsrUserService {
 
         if (userOptional.isPresent()) {
             var user = userOptional.get();
-            var tokenValue = SecureTokenUtils.generateAlphanumericToken(40);
-            var token = new UserActionToken(user, ActionType.RECOVER_ACCOUNT, tokenValue);
-            token = tokenRepository.save(token);
-            mailService.sendAccountRecoveryMail(user, token);
 
-            logger.debug("Generated account recovery token {} for user {}", tokenValue, user.getUsername());
+            try {
+                var tokenValue = SecureTokenUtils.generateAlphanumericToken(40);
+                var token = new UserActionToken(user, ActionType.RECOVER_ACCOUNT, tokenValue);
+                token = tokenRepository.save(token);
+                logger.debug("Generated account recovery token {} for user {}", tokenValue, user.getUsername());
+
+                mailService.sendAccountRecoveryMail(user, token);
+            } catch (InvalidTokenException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
     @Override
     @Transactional
     public void resetPassword(String password, String tokenValue) throws InvalidTokenException, ExpiredTokenException {
-        var token = findValidToken(tokenValue, ActionType.RECOVER_ACCOUNT);
+        var token = loadToken(tokenValue, ActionType.RECOVER_ACCOUNT);
         token.getUser().setPassword(passwordEncoder.encode(password));
-        token.setConsumed(true);
+        token.consume();
         logger.debug("Reset password for user {} using token {}", token.getUser().getUsername(), tokenValue);
     }
 
     @Override
     public boolean tokenIsValid(String tokenValue, ActionType actionType) {
-        var tokenOptional = tokenRepository.findByTokenValue(tokenValue);
-
-        if (tokenOptional.isPresent()) {
-            var token = tokenOptional.get();
-            if (token.hasExpired(Instant.now())) {
-                return false;
-            }
-            if (token.isConsumed()) {
-                return false;
-            }
-            return token.getActionType().equals(actionType);
-        } else {
+        try {
+            loadToken(tokenValue, actionType);
+            return true;
+        } catch (InvalidTokenException | ExpiredTokenException ignored) {
             return false;
         }
     }

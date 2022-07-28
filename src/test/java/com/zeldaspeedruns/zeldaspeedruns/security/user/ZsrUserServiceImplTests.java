@@ -67,6 +67,19 @@ class ZsrUserServiceImplTests {
     }
 
     @Test
+    void loadByEmailAddress() {
+        when(userRepository.findByEmailAddressIgnoreCase(emailAddress)).thenReturn(Optional.of(user));
+        var returned = assertDoesNotThrow(() -> userService.loadByEmailAddress(emailAddress));
+        assertEquals(returned, user);
+    }
+
+    @Test
+    void loadByEmailAddress_whenNotFound_throwsEmailNotFoundException() {
+        when(userRepository.findByEmailAddressIgnoreCase(anyString())).thenReturn(Optional.empty());
+        assertThrows(EmailNotFoundException.class, () -> userService.loadByEmailAddress(emailAddress));
+    }
+
+    @Test
     void createUser() {
         when(userRepository.existsByUsernameIgnoreCase(username)).thenReturn(false);
         when(userRepository.existsByEmailAddressIgnoreCase(emailAddress)).thenReturn(false);
@@ -158,7 +171,7 @@ class ZsrUserServiceImplTests {
     void confirmRegistration_whenExpired_throwsInvalidTokenException() {
         var token = createToken(ActionType.CONFIRM_EMAIL);
         var tokenValue = token.getTokenValue();
-        token.setConsumed(true);
+        token.consume();
 
         when(tokenRepository.findByTokenValue(tokenValue)).thenReturn(Optional.of(token));
 
@@ -207,5 +220,24 @@ class ZsrUserServiceImplTests {
         userService.resetPassword(newPassword, token.getTokenValue());
         assertTrue(token.isConsumed());
         assertEquals("encoded-password", user.getPassword());
+    }
+
+    @Test
+    void loadToken_whenNotFound_throwsInvalidTokenException() {
+        when(tokenRepository.findByTokenValue(anyString())).thenReturn(Optional.empty());
+        assertThrows(InvalidTokenException.class, () -> userService.loadToken("abcdef", ActionType.RECOVER_ACCOUNT));
+    }
+
+    @Test
+    void tokenIsValid() {
+        var token = createToken(ActionType.RECOVER_ACCOUNT);
+        when(tokenRepository.findByTokenValue(token.getTokenValue())).thenReturn(Optional.of(token));
+        assertTrue(userService.tokenIsValid(token.getTokenValue(), ActionType.RECOVER_ACCOUNT));
+    }
+
+    @Test
+    void tokenIsValid_whenNotFound_isFalse() {
+        when(tokenRepository.findByTokenValue(anyString())).thenReturn(Optional.empty());
+        assertFalse(userService.tokenIsValid("token", ActionType.RECOVER_ACCOUNT));
     }
 }

@@ -2,6 +2,7 @@ package com.zeldaspeedruns.zeldaspeedruns.security.user;
 
 import com.zeldaspeedruns.zeldaspeedruns.security.SecureTokenUtils;
 import com.zeldaspeedruns.zeldaspeedruns.security.SecurityConfig;
+import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -94,6 +95,17 @@ class ZsrUserControllerTests {
                 .andExpect(model().attributeHasFieldErrors("form", "username", "emailAddress", "password", "passwordConfirmation"));
 
         verifyNoInteractions(userService);
+    }
+
+    @Test
+    void registerUser_whenEmailFailed_setsError() throws Exception {
+        when(userService.registerUser(anyString(), anyString(), anyString()))
+                .thenThrow(new MessagingException("failed to send email"));
+
+        performValidRegistration()
+                .andExpect(status().isOk())
+                .andExpect(view().name("user/register_form"))
+                .andExpect(model().attributeHasErrors("form"));
     }
 
     @Test
@@ -191,6 +203,19 @@ class ZsrUserControllerTests {
 
 
         verifyNoInteractions(userService);
+    }
+
+    @Test
+    void postAccountRecoveryForm_whenEmailFailed_setsError() throws Exception {
+        doThrow(new MessagingException("email failed")).when(userService).startAccountRecovery(anyString());
+
+        mvc.perform(post("/user/recover-account")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("emailAddress", "spell@example.com")
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("user/account_recovery_form"))
+                .andExpect(model().attributeHasErrors("form"));
     }
 
     @Test

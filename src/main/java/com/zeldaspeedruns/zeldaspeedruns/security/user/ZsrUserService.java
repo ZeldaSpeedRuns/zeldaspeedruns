@@ -14,6 +14,13 @@ public interface ZsrUserService {
      */
     ZsrUser loadByUsername(String username) throws UsernameNotFoundException;
 
+    /**
+     * Loads a user from the persistent storage.
+     *
+     * @param emailAddress The email address of the user to find
+     * @return The user entity
+     * @throws EmailNotFoundException Thrown when no user with the given email address exists
+     */
     ZsrUser loadByEmailAddress(String emailAddress) throws EmailNotFoundException;
 
     /**
