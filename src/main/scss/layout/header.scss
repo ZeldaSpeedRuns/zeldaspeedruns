@@ -33,15 +33,15 @@
 
 .user-menu {
   background-color: $background-color-light;
-  border-radius: 5px;
+  border-radius: 0.25rem;
 
   list-style: none;
-  padding: 10px;
+  padding: 0.35rem;
   min-width: 300px;
   margin: 0;
 
   &__caret {
-    margin-left: 5px;
+    margin-left: 0.2rem;
     transition: transform ease-in-out 200ms;
   }
 
@@ -49,8 +49,8 @@
     color: $text-color;
     font-size: 1.25em;
 
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 0.8rem 1.4rem;
+    border-radius: 0.3rem;
     margin-right: 10px;
     cursor: pointer;
 
@@ -82,13 +82,13 @@
 
   &__item {
     min-height: 25px;
-    border-radius: 3px;
+    border-radius: 0.2rem;
     transition: background-color 200ms ease-in-out, color 200ms ease-in-out;
 
     a {
       display: block;
       width: 100%;
-      padding: 5px;
+      padding: 0.35rem;
       color: inherit;
     }
 

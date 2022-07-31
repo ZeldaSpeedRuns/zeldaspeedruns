@@ -2,7 +2,7 @@
 
 .form-error-list {
   list-style: none;
-  margin: 10px 0;
+  margin: 1rem 0;
   padding: 0;
   color: $error-color;
   font-size: 0.9em;
@@ -14,14 +14,14 @@
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0.8rem;
 }
 
 .form-field {
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: 5px;
+  gap: 0.4rem;
 
   &__label {
     font-size: 0.8em;
@@ -46,8 +46,8 @@
   border: 1px solid $border-color;
   font-size: 1rem;
   color: $text-color;
-  border-radius: 3px;
-  padding: 6px 10px;
+  border-radius: 0.2rem;
+  padding: 0.5rem 0.8rem;
   transition: border-color 200ms;
 
   &::placeholder {

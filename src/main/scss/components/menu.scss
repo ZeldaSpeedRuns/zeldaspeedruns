@@ -3,8 +3,8 @@
 .menu-item {
   display: grid;
   align-items: center;
-  gap: 5px;
-  grid-template-columns: 25px auto;
+  gap: 0.3rem;
+  grid-template-columns: 1.5rem auto;
 
   &__icon {
     width: 100%;
