@@ -27,6 +27,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
+    @Transactional
     public Organization createOrganization(String name, String slug) {
         if (organizationRepository.existsBySlug(slug)) {
             throw new OrganizationSlugInUseException("organization with that slug already exists");
@@ -44,6 +45,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
+    @Transactional
     public OrganizationMember addOrganizationMember(Organization organization, ZsrUser user) {
         if (memberRepository.existsByOrganizationAndUser(organization, user)) {
             throw new MembershipExistsException("already a member of organization");
@@ -54,6 +56,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
+    @Transactional
     public void deleteOrganization(Organization organization) {
         organizationRepository.delete(organization);
     }
