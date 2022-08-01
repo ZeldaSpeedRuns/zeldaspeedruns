@@ -80,4 +80,31 @@ public interface OrganizationService {
      * @return Optional containing the organization membership if found.
      */
     Optional<OrganizationMember> findMembership(Organization organization, ZsrUser user);
+
+    /**
+     * Creates an invitation token that can be used to join an Organization.
+     *
+     * @param organization The organization to create the invite token for.
+     * @param user         The user that created the token in the audit log.
+     * @return Invitation token entity.
+     */
+    OrganizationInvite createInvite(Organization organization, ZsrUser user);
+
+    /**
+     * Deletes an invitation token, making it invalid to use.
+     *
+     * @param invite The invitation to delete.
+     */
+    void deleteInvite(OrganizationInvite invite);
+
+    /**
+     * Joins an organization, making the user a member of the organization.
+     *
+     * @param invite The invite token to be used.
+     * @param user   The user to make a member.
+     * @return The new membership entity.
+     * @throws MembershipExistsException If the user is a member already.
+     * @throws InvalidInviteException    If the invite has expired, been invalidated, or reached its usage limit.
+     */
+    OrganizationMember joinOrganization(OrganizationInvite invite, ZsrUser user);
 }

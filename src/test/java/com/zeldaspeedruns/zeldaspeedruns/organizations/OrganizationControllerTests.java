@@ -98,7 +98,7 @@ class OrganizationControllerTests {
         var name = "ZeldaSpeedRuns";
         var slug = "zeldaspeedruns";
 
-        when (organizationService.createOrganization(name, slug))
+        when(organizationService.createOrganization(name, slug))
                 .thenReturn(OrganizationTestUtils.organization(name));
 
         mvc.perform(post("/organizations/create")

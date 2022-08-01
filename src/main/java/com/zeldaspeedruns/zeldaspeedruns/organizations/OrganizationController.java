@@ -1,7 +1,6 @@
 package com.zeldaspeedruns.zeldaspeedruns.organizations;
 
 import com.zeldaspeedruns.zeldaspeedruns.organizations.forms.CreateOrganizationForm;
-import com.zeldaspeedruns.zeldaspeedruns.security.user.ExpiredTokenException;
 import com.zeldaspeedruns.zeldaspeedruns.security.userdetails.ZsrUserDetails;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;

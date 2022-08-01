@@ -113,3 +113,41 @@ create table if not exists organization_member_roles
             on delete cascade
             on update cascade
 );
+
+
+create table if not exists organization_invites
+(
+    id              bigint primary key generated always as identity,
+    uuid            uuid    not null unique,
+    organization_id bigint  not null,
+    user_id         bigint  not null,
+    max_uses        bigint           default null,
+    expires_at      timestamptz      default null,
+    invalidated     boolean not null default false,
+    constraint fk_organization_invite_organization
+        foreign key (organization_id) references organizations (id)
+            on delete cascade
+            on update cascade,
+    constraint fk_organization_invite_user
+        foreign key (user_id) references users (id)
+            on delete cascade
+            on update cascade
+);
+
+
+create table if not exists organization_invite_uses
+(
+    id        bigint primary key generated always as identity,
+    invite_id bigint      not null,
+    user_id   bigint      not null,
+    used_at   timestamptz not null default now(),
+    constraint fk_organization_invite_use_invite
+        foreign key (invite_id) references organization_invites (id)
+            on delete cascade
+            on update cascade,
+    constraint fk_organization_invite_use_user
+        foreign key (user_id) references users (id)
+            on delete cascade
+            on update cascade
+);
+

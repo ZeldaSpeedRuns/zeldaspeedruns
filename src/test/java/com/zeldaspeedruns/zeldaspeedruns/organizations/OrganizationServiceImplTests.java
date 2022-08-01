@@ -3,6 +3,7 @@ package com.zeldaspeedruns.zeldaspeedruns.organizations;
 import com.zeldaspeedruns.zeldaspeedruns.security.user.ZsrUserTestUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -10,6 +11,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +29,12 @@ class OrganizationServiceImplTests {
 
     @Mock
     private OrganizationMemberRepository memberRepository;
+
+    @Mock
+    private OrganizationInviteRepository inviteRepository;
+
+    @Mock
+    private OrganizationInviteUseRepository inviteUseRepository;
 
     @InjectMocks
     private OrganizationServiceImpl organizationService;
@@ -176,5 +185,118 @@ class OrganizationServiceImplTests {
 
         var returned = organizationService.findMembership(organization, user);
         assertTrue(returned.isEmpty());
+    }
+
+    @Test
+    void createInvite() {
+        var organization = OrganizationTestUtils.organization("ZeldaSpeedRuns");
+        var user = ZsrUserTestUtils.zsrUser("spell");
+
+        when(inviteRepository.save(any(OrganizationInvite.class))).then(returnsFirstArg());
+
+        var invite = organizationService.createInvite(organization, user);
+
+        verify(inviteRepository, times(1)).save(invite);
+        assertEquals(invite.getOrganization(), organization);
+        assertEquals(invite.getUser(), user);
+    }
+
+    @Test
+    void deleteInvite() {
+        var organization = OrganizationTestUtils.organization("ZeldaSpeedRuns");
+        var user = ZsrUserTestUtils.zsrUser("spell");
+        var invite = new OrganizationInvite(organization, user);
+
+        organizationService.deleteInvite(invite);
+        assertTrue(invite.isInvalidated());
+    }
+
+    @Test
+    void joinOrganization() {
+        var organization = OrganizationTestUtils.organization("ZeldaSpeedRuns");
+        var user = ZsrUserTestUtils.zsrUser("spell");
+        var invite = new OrganizationInvite(organization, user);
+
+        when(inviteUseRepository.save(any(OrganizationInviteUse.class))).then(returnsFirstArg());
+        when(memberRepository.save(any(OrganizationMember.class))).then(returnsFirstArg());
+        when(memberRepository.existsByOrganizationAndUser(organization, user)).thenReturn(false);
+
+        var member = assertDoesNotThrow(() -> organizationService.joinOrganization(invite, user));
+
+        var captor = ArgumentCaptor.forClass(OrganizationInviteUse.class);
+        verify(inviteUseRepository, times(1)).save(captor.capture());
+        verify(memberRepository, times(1)).save(member);
+
+        assertEquals(user, member.getUser());
+        assertEquals(organization, member.getOrganization());
+        assertEquals(user, captor.getValue().getUser());
+        assertEquals(invite, captor.getValue().getInvite());
+    }
+
+    @Test
+    void joinOrganization_whenExpired_throwsInvalidInviteException() {
+        var organization = OrganizationTestUtils.organization("ZeldaSpeedRuns");
+        var user = ZsrUserTestUtils.zsrUser("spell");
+        var invite = new OrganizationInvite(organization, user);
+        invite.setExpiresAt(OffsetDateTime.now().minus(7, ChronoUnit.DAYS));
+
+        assertThrows(
+                InvalidInviteException.class,
+                () -> organizationService.joinOrganization(invite, user)
+        );
+
+        verify(inviteUseRepository, never()).save(any(OrganizationInviteUse.class));
+        verify(memberRepository, never()).save(any(OrganizationMember.class));
+    }
+
+    @Test
+    void joinOrganization_whenMaxUses_throwsInvalidInviteException() {
+        var organization = OrganizationTestUtils.organization("ZeldaSpeedRuns");
+        var user = ZsrUserTestUtils.zsrUser("spell");
+        var invite = new OrganizationInvite(organization, user);
+        invite.setMaxUses(10L);
+
+        when(inviteUseRepository.countByInvite(invite)).thenReturn(10L);
+
+        assertThrows(
+                InvalidInviteException.class,
+                () -> organizationService.joinOrganization(invite, user)
+        );
+
+        verify(inviteUseRepository, never()).save(any(OrganizationInviteUse.class));
+        verify(memberRepository, never()).save(any(OrganizationMember.class));
+    }
+
+    @Test
+    void joinOrganization_whenInvalidated_throwsInvalidInviteException() {
+        var organization = OrganizationTestUtils.organization("ZeldaSpeedRuns");
+        var user = ZsrUserTestUtils.zsrUser("spell");
+        var invite = new OrganizationInvite(organization, user);
+        invite.setInvalidated(true);
+
+        assertThrows(
+                InvalidInviteException.class,
+                () -> organizationService.joinOrganization(invite, user)
+        );
+
+        verify(inviteUseRepository, never()).save(any(OrganizationInviteUse.class));
+        verify(memberRepository, never()).save(any(OrganizationMember.class));
+    }
+
+    @Test
+    void joinOrganization_whenAlreadyMember_throwsMembershipExistsException() {
+        var organization = OrganizationTestUtils.organization("ZeldaSpeedRuns");
+        var user = ZsrUserTestUtils.zsrUser("spell");
+        var invite = new OrganizationInvite(organization, user);
+
+        when(memberRepository.existsByOrganizationAndUser(organization, user)).thenReturn(true);
+
+        assertThrows(
+                MembershipExistsException.class,
+                () -> organizationService.joinOrganization(invite, user)
+        );
+
+        verify(inviteUseRepository, never()).save(any(OrganizationInviteUse.class));
+        verify(memberRepository, never()).save(any(OrganizationMember.class));
     }
 }

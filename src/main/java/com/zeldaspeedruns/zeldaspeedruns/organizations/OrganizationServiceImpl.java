@@ -4,18 +4,26 @@ import com.zeldaspeedruns.zeldaspeedruns.security.user.ZsrUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
     private final OrganizationRepository organizationRepository;
     private final OrganizationMemberRepository memberRepository;
+    private final OrganizationInviteRepository inviteRepository;
+    private final OrganizationInviteUseRepository inviteUseRepository;
 
     public OrganizationServiceImpl(OrganizationRepository organizationRepository,
-                                   OrganizationMemberRepository memberRepository) {
+                                   OrganizationMemberRepository memberRepository,
+                                   OrganizationInviteRepository inviteRepository,
+                                   OrganizationInviteUseRepository inviteUseRepository) {
         this.organizationRepository = organizationRepository;
         this.memberRepository = memberRepository;
+        this.inviteRepository = inviteRepository;
+        this.inviteUseRepository = inviteUseRepository;
     }
 
     @Override
@@ -73,5 +81,41 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public Optional<OrganizationMember> findMembership(Organization organization, ZsrUser user) {
         return memberRepository.findByUserAndOrganization(user, organization);
+    }
+
+    @Override
+    @Transactional
+    public OrganizationInvite createInvite(Organization organization, ZsrUser user) {
+        return inviteRepository.save(new OrganizationInvite(organization, user));
+    }
+
+    @Override
+    @Transactional
+    public void deleteInvite(OrganizationInvite invite) {
+        invite.setInvalidated(true);
+    }
+
+    @Override
+    @Transactional
+    public OrganizationMember joinOrganization(OrganizationInvite invite, ZsrUser user) {
+        if (invite.isInvalidated()) {
+            throw new InvalidInviteException("this invite has been invalidated");
+        }
+
+        if (invite.hasExpired(OffsetDateTime.now())) {
+            throw new InvalidInviteException("invite has expired");
+        }
+
+        if (invite.getMaxUses().isPresent()) {
+            var maxUses = invite.getMaxUses().get();
+            var uses = inviteUseRepository.countByInvite(invite);
+            if (uses >= maxUses) {
+                throw new InvalidInviteException("usage limit reached");
+            }
+        }
+
+        var membership = addOrganizationMember(invite.getOrganization(), user);
+        inviteUseRepository.save(new OrganizationInviteUse(invite, user));
+        return membership;
     }
 }
