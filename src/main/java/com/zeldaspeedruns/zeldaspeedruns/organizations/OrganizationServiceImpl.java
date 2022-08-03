@@ -1,5 +1,6 @@
 package com.zeldaspeedruns.zeldaspeedruns.organizations;
 
+import com.zeldaspeedruns.zeldaspeedruns.organizations.projections.InviteWithUsageCount;
 import com.zeldaspeedruns.zeldaspeedruns.security.user.ZsrUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
@@ -120,5 +122,20 @@ public class OrganizationServiceImpl implements OrganizationService {
         var membership = addOrganizationMember(invite.getOrganization(), user);
         inviteUseRepository.save(new OrganizationInviteUse(invite, user));
         return membership;
+    }
+
+    @Override
+    public Optional<OrganizationInvite> findInviteByUUID(UUID uuid) {
+        return inviteRepository.findByUuid(uuid);
+    }
+
+    @Override
+    public Page<InviteWithUsageCount> findAllInvitesByOrganization(Organization organization, Pageable pageable) {
+        return inviteRepository.findByOrganizationWithUsage(organization, pageable);
+    }
+
+    @Override
+    public Page<OrganizationInviteUse> findAllInviteUsesByInvite(OrganizationInvite invite, Pageable pageable) {
+        return inviteUseRepository.findByInvite(invite, pageable);
     }
 }

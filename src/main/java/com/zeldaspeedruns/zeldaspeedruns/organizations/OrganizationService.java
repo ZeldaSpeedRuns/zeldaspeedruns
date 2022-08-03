@@ -1,11 +1,13 @@
 package com.zeldaspeedruns.zeldaspeedruns.organizations;
 
 import com.zeldaspeedruns.zeldaspeedruns.InvalidSlugException;
+import com.zeldaspeedruns.zeldaspeedruns.organizations.projections.InviteWithUsageCount;
 import com.zeldaspeedruns.zeldaspeedruns.security.user.ZsrUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * The organization service specifies a means of managing organizations.
@@ -107,4 +109,30 @@ public interface OrganizationService {
      * @throws InvalidInviteException    If the invite has expired, been invalidated, or reached its usage limit.
      */
     OrganizationMember joinOrganization(OrganizationInvite invite, ZsrUser user);
+
+    /**
+     * Finds an invitation by its UUID.
+     *
+     * @param uuid The UUID that identifies the invitation.
+     * @return An optional containing an invitation if found.
+     */
+    Optional<OrganizationInvite> findInviteByUUID(UUID uuid);
+
+    /**
+     * Finds all invites for an organization.
+     *
+     * @param organization Organization to find invites for.
+     * @param pageable     Pageable to use for paging and sorting.
+     * @return Page containing zero or more invites.
+     */
+    Page<InviteWithUsageCount> findAllInvitesByOrganization(Organization organization, Pageable pageable);
+
+    /**
+     * Finds all invite uses for an invitation.
+     *
+     * @param invite   Invitation to find uses for.
+     * @param pageable Pageable to use for paging and sorting.
+     * @return Page containing zero or more invite uses.
+     */
+    Page<OrganizationInviteUse> findAllInviteUsesByInvite(OrganizationInvite invite, Pageable pageable);
 }

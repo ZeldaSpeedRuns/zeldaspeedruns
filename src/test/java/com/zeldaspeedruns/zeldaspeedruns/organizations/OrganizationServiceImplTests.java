@@ -15,6 +15,7 @@ import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
@@ -298,5 +299,26 @@ class OrganizationServiceImplTests {
 
         verify(inviteUseRepository, never()).save(any(OrganizationInviteUse.class));
         verify(memberRepository, never()).save(any(OrganizationMember.class));
+    }
+
+    @Test
+    void findInviteByUUID() {
+        var organization = OrganizationTestUtils.organization("ZeldaSpeedRuns");
+        var user = ZsrUserTestUtils.zsrUser("spell");
+        var invite = new OrganizationInvite(organization, user);
+
+        when(inviteRepository.findByUuid(invite.getUUID())).thenReturn(Optional.of(invite));
+
+        var optional = organizationService.findInviteByUUID(invite.getUUID());
+        assertTrue(optional.isPresent());
+        assertEquals(invite, optional.get());
+    }
+
+    @Test
+    void findInviteByUUID_whenNotFound_isEmpty() {
+        when(inviteRepository.findByUuid(any(UUID.class))).thenReturn(Optional.empty());
+
+        var optional = organizationService.findInviteByUUID(UUID.randomUUID());
+        assertTrue(optional.isEmpty());
     }
 }

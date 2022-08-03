@@ -22,7 +22,13 @@ public class OrganizationManagementController {
 
     @ModelAttribute("organization")
     public Organization loadOrganization(@PathVariable String slug) {
-        return organizationService.findOrganizationBySlug(slug).orElse(null);
+        var organization = organizationService.findOrganizationBySlug(slug);
+
+        if (organization.isPresent()) {
+            return organization.get();
+        } else {
+            throw new RuntimeException("organization not found");
+        }
     }
 
     @GetMapping
@@ -43,5 +49,14 @@ public class OrganizationManagementController {
     @GetMapping("/roles")
     public String getRolesPanel(Organization organization) {
         return "organizations/manage_roles";
+    }
+
+    @GetMapping("/invites")
+    public String getInvitesPanel(Organization organization,
+                                  @PageableDefault Pageable pageable,
+                                  Model model) throws Exception {
+        var invites = organizationService.findAllInvitesByOrganization(organization, pageable);
+        model.addAttribute("invites", invites);
+        return "organizations/manage_invites";
     }
 }

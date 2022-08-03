@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{organizations/organization_management_layout}">
+<head>
+    <title th:text="${organization.name}">Organization</title>
+</head>
+<body>
+<section class="cp-content" layout:fragment="body">
+    <h1 th:text="${organization.name}">Organization</h1>
+
+    <div class="cp-card">
+        <div class="cp-card__header">
+            <h2>Invites</h2>
+        </div>
+        <div class="cp-card__body">
+            <div style="display: grid; grid-template-columns: 3fr 1fr 1fr 1fr 1fr; gap: 10px; align-items: center">
+                <div style="font-weight: bold">Code</div>
+                <div style="font-weight: bold">Expires in</div>
+                <div style="font-weight: bold">Uses</div>
+                <div style="font-weight: bold">Max uses</div>
+                <div style="font-weight: bold">Invalidated</div>
+
+                <th:block th:each="invite : ${invites}">
+                    <div th:text="${invite.uuid}">Name</div>
+
+                    <div th:if="${invite.expiresAt}"
+                         th:with="days=${invite.expiresIn.toDays()}"
+                         th:text="${days + ' days'}">
+                        In 3 days
+                    </div>
+                    <div th:unless="${invite.expiresAt}">Never</div>
+
+                    <div  th:text="${invite.uses}">0</div>
+
+                    <div th:if="${invite.maxUses}" th:text="${invite.maxUses}">Unlimited</div>
+                    <div th:unless="${invite.maxUses}">Unlimited</div>
+
+                    <div th:if="${invite.invalidated}">Invalid</div>
+                    <div th:unless="${invite.invalidated}">Valid</div>
+                </th:block>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
