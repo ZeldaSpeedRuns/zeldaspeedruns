@@ -1,13 +1,12 @@
 package com.zeldaspeedruns.zeldaspeedruns.organizations;
 
 import com.zeldaspeedruns.zeldaspeedruns.InvalidSlugException;
-import com.zeldaspeedruns.zeldaspeedruns.organizations.projections.InviteWithUsageCount;
+import com.zeldaspeedruns.zeldaspeedruns.organizations.projections.InviteWithUsageProjection;
 import com.zeldaspeedruns.zeldaspeedruns.security.user.ZsrUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
-import java.util.UUID;
 
 /**
  * The organization service specifies a means of managing organizations.
@@ -111,12 +110,12 @@ public interface OrganizationService {
     OrganizationMember joinOrganization(OrganizationInvite invite, ZsrUser user);
 
     /**
-     * Finds an invitation by its UUID.
+     * Finds an invitation by its invite code.
      *
-     * @param uuid The UUID that identifies the invitation.
+     * @param code The string that identifies the invitation.
      * @return An optional containing an invitation if found.
      */
-    Optional<OrganizationInvite> findInviteByUUID(UUID uuid);
+    Optional<OrganizationInvite> findInviteByCode(String code);
 
     /**
      * Finds all invites for an organization.
@@ -125,7 +124,7 @@ public interface OrganizationService {
      * @param pageable     Pageable to use for paging and sorting.
      * @return Page containing zero or more invites.
      */
-    Page<InviteWithUsageCount> findAllInvitesByOrganization(Organization organization, Pageable pageable);
+    Page<InviteWithUsageProjection> findAllInvitesByOrganization(Organization organization, Pageable pageable);
 
     /**
      * Finds all invite uses for an invitation.

@@ -307,18 +307,18 @@ class OrganizationServiceImplTests {
         var user = ZsrUserTestUtils.zsrUser("spell");
         var invite = new OrganizationInvite(organization, user);
 
-        when(inviteRepository.findByUuid(invite.getUUID())).thenReturn(Optional.of(invite));
+        when(inviteRepository.findByCode(invite.getCode())).thenReturn(Optional.of(invite));
 
-        var optional = organizationService.findInviteByUUID(invite.getUUID());
+        var optional = organizationService.findInviteByCode(invite.getCode());
         assertTrue(optional.isPresent());
         assertEquals(invite, optional.get());
     }
 
     @Test
     void findInviteByUUID_whenNotFound_isEmpty() {
-        when(inviteRepository.findByUuid(any(UUID.class))).thenReturn(Optional.empty());
+        when(inviteRepository.findByCode(any(String.class))).thenReturn(Optional.empty());
 
-        var optional = organizationService.findInviteByUUID(UUID.randomUUID());
+        var optional = organizationService.findInviteByCode("test");
         assertTrue(optional.isEmpty());
     }
 }

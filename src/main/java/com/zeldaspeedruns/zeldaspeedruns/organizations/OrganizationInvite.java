@@ -1,5 +1,6 @@
 package com.zeldaspeedruns.zeldaspeedruns.organizations;
 
+import com.zeldaspeedruns.zeldaspeedruns.security.SecureTokenUtils;
 import com.zeldaspeedruns.zeldaspeedruns.security.user.ZsrUser;
 import jakarta.persistence.*;
 import org.hibernate.annotations.NaturalId;
@@ -12,12 +13,16 @@ import java.util.UUID;
 @Entity
 @Table(name = "organization_invites")
 public class OrganizationInvite {
-    @NaturalId
-    @Column(name = "uuid", unique = true, updatable = false, nullable = false)
-    private final UUID uuid = UUID.randomUUID();
+    public static final int INVITE_CODE_LENGTH = 20;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NaturalId
+    @Column(name = "code", unique = true, updatable = false, nullable = false, length = INVITE_CODE_LENGTH)
+    private final String code;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "organization_id", referencedColumnName = "id", nullable = false, updatable = false)
     private Organization organization;
@@ -36,19 +41,27 @@ public class OrganizationInvite {
     private Boolean invalidated = false;
 
     protected OrganizationInvite() {
+        this.code = SecureTokenUtils.generateAlphanumericToken(INVITE_CODE_LENGTH);
     }
 
     public OrganizationInvite(Organization organization, ZsrUser user) {
         this.organization = organization;
         this.user = user;
+        this.code = SecureTokenUtils.generateAlphanumericToken(INVITE_CODE_LENGTH);
+    }
+
+    public OrganizationInvite(Organization organization, ZsrUser user, String code) {
+        this.organization = organization;
+        this.user = user;
+        this.code = code;
     }
 
     public Long getId() {
         return id;
     }
 
-    public UUID getUUID() {
-        return uuid;
+    public String getCode() {
+        return code;
     }
 
     public Organization getOrganization() {

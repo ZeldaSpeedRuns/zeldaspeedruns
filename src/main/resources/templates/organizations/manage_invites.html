@@ -23,7 +23,7 @@
                 <div style="font-weight: bold">Invalidated</div>
 
                 <th:block th:each="invite : ${invites}">
-                    <div th:text="${invite.uuid}">Name</div>
+                    <div style="font-family: monospace" th:text="${invite.code}">Code</div>
 
                     <div th:if="${invite.expiresAt}"
                          th:with="days=${invite.expiresIn.toDays()}"
