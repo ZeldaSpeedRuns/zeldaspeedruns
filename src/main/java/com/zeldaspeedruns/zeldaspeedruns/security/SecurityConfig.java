@@ -20,7 +20,6 @@ import org.springframework.security.oauth2.server.authorization.client.JdbcRegis
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
-import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OidcConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.ProviderSettings;
 import org.springframework.security.web.SecurityFilterChain;
@@ -80,30 +79,6 @@ public class SecurityConfig {
                 });
 
         return httpSecurity.build();
-    }
-
-    @Bean
-    public RegisteredClientRepository registeredClientRepository(JdbcOperations jdbcOperations) {
-        var repository = new JdbcRegisteredClientRepository(jdbcOperations);
-        var client = repository.findByClientId("zeldaspeedruns");
-
-        if (client == null) {
-            client = RegisteredClient.withId(UUID.randomUUID().toString())
-                    .clientId("zeldaspeedruns")
-                    .clientSecret("{bcrypt}" + passwordEncoder().encode("secret"))
-                    .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                    .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                    .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                    .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-                    .redirectUri("http://127.0.0.1:8080/user/login/oauth2/code/messaging-client-oidc")
-                    .scope(OidcScopes.OPENID)
-                    .clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
-                    .build();
-
-            repository.save(client);
-        }
-
-        return repository;
     }
 
     @Bean

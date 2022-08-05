@@ -155,18 +155,13 @@ create table if not exists organization_invite_uses
 ---
 --- Spring Security OAuth2 Authorization Server
 ---
-create table if not exists oauth2_registered_client
+create table if not exists oauth2_registered_clients
 (
-    id                            varchar(100) primary key not null,
-    client_id                     varchar(100)             not null,
-    client_id_issued_at           timestamp                not null default now(),
-    client_secret                 varchar(200)                      default null,
-    client_secret_expires_at      timestamp                         default null,
-    client_name                   varchar(200)             not null,
-    client_authentication_methods varchar(1000)            not null,
-    authorization_grant_types     varchar(1000)            not null,
-    redirect_uris                 varchar(1000)                     default null,
-    scopes                        varchar(1000)            not null,
-    client_settings               varchar(2000)            not null,
-    token_settings                varchar(2000)            not null
+    id                       bigint primary key generated always as identity,
+    uuid                     uuid         not null unique not null default uuid_generate_v4(),
+    client_id                varchar(255) not null unique,
+    client_id_issued_at      timestamp    not null                 default now(),
+    client_secret            varchar(255)                          default null,
+    client_secret_expires_at timestamp                             default null,
+    client_name              varchar(255) not null
 );
