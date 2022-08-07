@@ -28,6 +28,11 @@
     font-weight: 500;
   }
 
+  &__description {
+    color: $text-color-muted;
+    font-size: 0.75em;
+  }
+
   &__error-list {
     font-size: 0.8em;
     font-weight: 600;
@@ -68,4 +73,9 @@
   &--error {
     border-color: $error-color;
   }
+}
+
+.urls-textarea {
+  resize: vertical;
+  font-family: monospace, monospace;
 }

@@ -1,5 +1,6 @@
 package com.zeldaspeedruns.zeldaspeedruns.security.oauth2;
 
+import com.zeldaspeedruns.zeldaspeedruns.security.user.ZsrUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +12,6 @@ public interface OAuth2RegisteredClientRepository extends JpaRepository<OAuth2Re
     Optional<OAuth2RegisteredClient> findByUuid(UUID uuid);
 
     Optional<OAuth2RegisteredClient> findByClientId(String clientId);
+
+    Iterable<OAuth2RegisteredClient> findByUser(ZsrUser user);
 }

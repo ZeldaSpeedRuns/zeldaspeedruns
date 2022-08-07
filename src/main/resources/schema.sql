@@ -152,9 +152,6 @@ create table if not exists organization_invite_uses
 );
 
 
----
---- Spring Security OAuth2 Authorization Server
----
 create table if not exists oauth2_registered_clients
 (
     id                       bigint primary key generated always as identity,
@@ -163,5 +160,10 @@ create table if not exists oauth2_registered_clients
     client_id_issued_at      timestamp    not null                 default now(),
     client_secret            varchar(255)                          default null,
     client_secret_expires_at timestamp                             default null,
-    client_name              varchar(255) not null
+    client_name              varchar(255) not null,
+    user_id                  bigint                                default null,
+    constraint fk_oauth2_registered_client_user
+        foreign key (user_id) references users (id)
+            on update cascade
+            on delete cascade
 );

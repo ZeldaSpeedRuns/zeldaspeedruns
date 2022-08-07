@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{ucp/ucp_layout}">
+<head>
+    <title th:text="#{ucp.api-clients.title}">API Clients</title>
+</head>
+<body>
+<section layout:fragment="body">
+    <h1 th:text="#{ucp.heading}">Account Management</h1>
+
+    <div class="cp-card">
+        <div class="cp-card__header row">
+            <h2 class="grow" th:text="#{ucp.api-clients.heading}">
+                API Clients
+            </h2>
+            <a th:href="@{/user/account/api-clients/create}">
+                <button class="button" th:text="#{ucp.api-clients.create}">Create API Client</button>
+            </a>
+        </div>
+
+        <div class="cp-card__body">
+            <div class="text-center" th:if="${apiClients.isEmpty()}"
+                 th:text="#{ucp.api-clients.no-clients}">
+                You do not any registered API Clients.
+            </div>
+            <div class="margin-y-sm" th:each="client : ${apiClients}">
+                <div th:text="${client.clientName}" style="color: gold; font-size: 1.2em; font-weight: 600">
+                    Client Name
+                </div>
+
+                <div class="col grow" style="margin-top: 0.2rem; font-size: 0.9em">
+                    <div class="cp-label" th:text="#{ucp.api-clients.client-id}">
+                        Client ID
+                    </div>
+                    <div class="cp-value" th:text="${client.clientId}">Client ID</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

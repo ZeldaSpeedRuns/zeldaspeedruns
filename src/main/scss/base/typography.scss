@@ -22,3 +22,17 @@ a {
   font-weight: 600;
   text-decoration: none;
 }
+
+p {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  font-size: 0.95em;
+  line-height: 1.7rem;
+
+  &:first-child {
+    margin-top: 0;
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

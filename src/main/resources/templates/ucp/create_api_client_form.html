@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{ucp/ucp_layout}">
+<head>
+    <title th:text="#{ucp.api-clients.create.title}">Account Management</title>
+</head>
+<body>
+<section layout:fragment="body">
+    <h1 th:text="#{ucp.heading}">Account Management</h1>
+
+    <form method="post" th:action="@{/user/account/api-clients/create}" th:object="${form}">
+        <div class="cp-card">
+            <div class="cp-card__header row">
+                <h2 class="grow" th:text="#{ucp.api-clients.create.heading}">
+                    API Clients
+                </h2>
+                <a th:href="@{/user/account/api-clients}">
+                    <button type="button" class="button" th:text="#{ucp.back}">Create API Client</button>
+                </a>
+            </div>
+
+            <div class="cp-card__body">
+                <p>
+                    Register a new application that uses the ZSR API to interact with the ZeldaSpeedRuns services.
+                    This service is provided free of charge at a fair use basis, please be respectful of our
+                    physical resources and cache responses where appropriate.
+                </p>
+
+                <p>Don't know what to do here? <a href="#">Read the documentation!</a></p>
+
+                <hr/>
+
+                <ul class="form-error-list" th:if="${#fields.hasGlobalErrors()}">
+                    <li th:errors="*"></li>
+                </ul>
+
+                <div class="form-group">
+                    <div class="form-field">
+                        <label for="client-name" class="form-field__label"
+                               th:text="#{api-client.label.name}">
+                            Name
+                        </label>
+                        <input type="text" id="client-name" class="input" required
+                               placeholder="API Client" th:placeholder="#{api-client.placeholder.name}"
+                               th:field="*{name}" th:errorclass="input--error">
+                        <div class="form-field__description">
+                            The name displayed to users when authorizing your application.
+                        </div>
+                        <ul th:if="${#fields.hasErrors('name')}" class="form-field__error-list">
+                            <li th:errors="*{name}">Name errors</li>
+                        </ul>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="redirect-urls" class="form-field__label"
+                               th:text="#{api-client.label.redirect-urls}">
+                            Redirect URLs
+                        </label>
+                        <textarea id="redirect-urls" class="input urls-textarea" required rows="4"
+                                  placeholder="https://example.com"
+                                  th:placeholder="#{api-client.placeholder.redirect-urls}"
+                                  th:field="*{redirectUrls}" th:errorclass="input--error"></textarea>
+                        <div class="form-field__description">
+                            These URLs will receive the result of a client authorization by a user. The redirect_uri
+                            parameter passed to the authorization endpoint must match one of these. While testing
+                            locally you are allowed to set this http://localhost.
+                        </div>
+                        <ul th:if="${#fields.hasErrors('redirectUrls')}" class="form-field__error-list">
+                            <li th:errors="*{redirectUrls}">URL errors</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cp-card__footer row">
+                <div class="grow"></div>
+                <button class="button" type="submit"
+                        th:text="#{ucp.api-clients.create}">
+                    Create API Client
+                </button>
+            </div>
+        </div>
+    </form>
+</section>
+</body>
+</html>

@@ -1,5 +1,6 @@
 package com.zeldaspeedruns.zeldaspeedruns.security.oauth2;
 
+import com.zeldaspeedruns.zeldaspeedruns.security.user.ZsrUser;
 import jakarta.persistence.*;
 import org.hibernate.annotations.NaturalId;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
@@ -11,13 +12,11 @@ import java.util.UUID;
 @Entity
 @Table(name = "oauth2_registered_clients")
 public class OAuth2RegisteredClient {
+    @Column(name = "uuid", nullable = false, unique = true, updatable = false)
+    private final UUID uuid;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "uuid", nullable = false, unique = true, updatable = false)
-    private final UUID uuid;
-
     @NaturalId
     @Column(name = "client_id", nullable = false, unique = true)
     private String clientId;
@@ -33,6 +32,10 @@ public class OAuth2RegisteredClient {
 
     @Column(name = "client_name", nullable = false)
     private String clientName;
+
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private ZsrUser user;
 
     protected OAuth2RegisteredClient() {
         this.uuid = UUID.randomUUID();
@@ -101,5 +104,11 @@ public class OAuth2RegisteredClient {
         this.clientName = clientName;
     }
 
+    public ZsrUser getUser() {
+        return user;
+    }
 
+    public void setUser(ZsrUser user) {
+        this.user = user;
+    }
 }
