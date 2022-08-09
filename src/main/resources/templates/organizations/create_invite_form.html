@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{organizations/organization_management_layout}">
+<head>
+    <title th:text="${organization.name}">Organization</title>
+</head>
+<body>
+<section class="cp-content" layout:fragment="body">
+    <h1 th:text="${organization.name}">Organization</h1>
+
+    <form method="post" th:object="${form}"
+          th:action="@{/organizations/{slug}/manage/invites/create(slug=${organization.slug})}">
+        <div class="cp-card">
+            <div class="cp-card__header row">
+                <h2 class="grow">Create Invite</h2>
+                <a th:href="@{/organizations/{slug}/manage/invites(slug=${organization.slug})}">
+                    <button type="button" class="button">Back</button>
+                </a>
+            </div>
+
+            <div class="cp-card__body">
+                <ul class="form-error-list" th:if="${#fields.hasGlobalErrors()}">
+                    <li th:errors="*"></li>
+                </ul>
+
+                <div class="form-group">
+                    <div class="form-field">
+                        <label for="invite-usage-limit" class="form-field__label">
+                            Maximum uses
+                        </label>
+                        <input type="number" id="invite-usage-limit" class="input" min="0"
+                               th:field="*{maxUses}" th:errorclass="input--error"/>
+                        <div class="form-field__description">
+                            The maximum uses before this invite expires, set this to 0 for unlimited uses.
+                        </div>
+                        <ul th:if="${#fields.hasErrors('maxUses')}" class="form-field__error-list">
+                            <li th:errors="*{maxUses}">Usage errors</li>
+                        </ul>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="invite-expires-at" class="form-field__label">
+                            Expires at
+                        </label>
+                        <input type="datetime-local" id="invite-expires-at" class="input"
+                               th:field="*{expiresAt}" th:errorclass="input--error"/>
+                        <div class="form-field__description">
+                            The date this invite expires at, leave blank to never expire.
+                        </div>
+                        <ul th:if="${#fields.hasErrors('expiresAt')}" class="form-field__error-list">
+                            <li th:errors="*{expiresAt}">Expiry errors</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cp-card__footer row">
+                <div class="grow"></div>
+                <button type="submit" class="button">Create</button>
+            </div>
+        </div>
+    </form>
+</section>
+</body>
+</html>

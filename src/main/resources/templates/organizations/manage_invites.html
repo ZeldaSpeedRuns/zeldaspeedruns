@@ -11,8 +11,11 @@
     <h1 th:text="${organization.name}">Organization</h1>
 
     <div class="cp-card">
-        <div class="cp-card__header">
-            <h2>Invites</h2>
+        <div class="cp-card__header row">
+            <h2 class="grow">Invites</h2>
+            <a th:href="@{/organizations/{slug}/manage/invites/create(slug=${organization.slug})}">
+                <button type="button" class="button">Create Invite</button>
+            </a>
         </div>
         <div class="cp-card__body">
             <div style="display: grid; grid-template-columns: 3fr 1fr 1fr 1fr 1fr; gap: 10px; align-items: center">

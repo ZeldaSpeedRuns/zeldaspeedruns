@@ -27,7 +27,7 @@ public class OrganizationInvite {
     @JoinColumn(name = "organization_id", referencedColumnName = "id", nullable = false, updatable = false)
     private Organization organization;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, updatable = false)
     private ZsrUser user;
 
